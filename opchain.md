@@ -1,295 +1,295 @@
-# 与链通信
+# Communication with the Chain
 
-## 3 与链通信
+## 3 Communication with the chain
 
-Onotology链支持Restful、RPC和Websocket连接。
+The Onotology chain supports Restful, RPC, and Websocket connections.
 
-|  连接方式    | 端口  |
+|  Connection    | Port  |
 |:--------    |:--   |
 |   restful   | 20334|
 |   rpc       | 20336|
 |   websocket | 20335|
 
-### 3.1 基础接口
+### 3.1 Basic Interface
 
 1 boolean sendRawTransaction(Transaction tx)
-* 描述
-发送交易
-* 输入参数
-交易实例
-* 输出参数
-true 代表成功
-fals 代表失败
-* 异常处理
+* Description
+Send transaction
+* Input parameters
+Transaction instance
+* Output parameters
+true represents success
+fals represents failure
+* Exception handling
 
-|   错误码 |  发生场景        |
+|  Error Code |  Occurrence Scenario        |
 |:--------| :------     |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 2 boolean sendRawTransaction(String hexData)
-* 描述
-发送交易
-* 输入参数
-交易实例的十六进制字符串形式
-* 输出参数
-true 代表成功
-fals 代表失败
-* 异常处理
+* Description
+Send transaction
+* Input parameters
+The hexadecimal string form of the transaction instance
+* Output parameters
+true represents success
+fals represents failure
+* Exception handling
 
-|   错误码 |  发生场景        |
+| Error Code |  Occurrence Scenario        |
 |:--------| :------      |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 3 Object sendRawTransactionPreExec(String hexData)
-* 描述
-发送预执行交易，预执行不会修改链上的数据，不用参与共识
-* 输入参数
-交易实例的十六进制字符串形式
-* 输出参数
-对象
-* 异常处理
+* Description
+Send pre-executed transactions. Pre-execution will not modify the data on the chain and it does not participate in the consensus.
+* Input parameters
+The hexadecimal string form of the transaction instance
+* Output parameters
+objects
+* Exception handling
 
-|   错误码 |  发生场景        |
+| Error Code |  Occurrence Scenario        |
 |:--------| :------                                               |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 4 Transaction  getTransaction(String txhash)
-* 描述
-根据交易hash获得交易
-* 输入参数
-交易hash，去掉前面的"0x"
-* 输出参数
-交易Transaction
-* 异常处理
+* Description
+Get transaction by transaction hash
+* Input parameters
+transaction hash，remove the previous "0x"
+* Output parameters
+Transaction
+* Exception handling
 
-|   错误码 |  发生场景        |
+| Error Code |  Occurrence Scenario        |
 |:--------| :------                                               |
 |58023    | Invalid url |
 |53001    |Transaction deserialize failed|
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 5 Object getTransactionJson(String txhash)
-* 描述
-根据交易hash获得交易json数据
-* 输入参数
-交易hash，去掉前面的"0x"
-* 输出参数
-交易json对象
-* 异常处理
+* Description
+Get transaction json data by transaction hash
+* Input parameters
+Transaction hash，remove the previous "0x"
+* Output parameters
+Transaction json objects
+* Exception handling
 
-|   错误码 |  发生场景        |
+| Error Code |  Occurrence Scenario        |
 |:--------| :------       |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 6 int getGenerateBlockTime()
-* 描述
-返回出块时间
-* 输入参数
-* 输出参数
-出块时间
-* 异常处理
+* Description
+Return block-generated time
+* Input parameters
+* Output parameters
+Block-generated time
+* Exception handling
 
-|   错误码 |  发生场景        |
+| Error Code |  Occurrence Scenario        |
 |:--------| :------     |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 7 int getNodeCount()
-* 描述
-获得已连接的节点数量
-* 输入参数
-* 输出参数
-出块时间
-* 异常处理
+* Description
+Get the number of connected nodes
+* Input parameters
+* Output parameters
+Block-generated time
+* Exception handling
 
-|   错误码 |  发生场景        |
+| Error Code |  Occurrence Scenario        |
 |:--------| :------    |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 8 int getBlockHeight()
-* 描述
-获得区块高度
-* 输入参数
-* 输出参数
-当前的区块高度
-* 异常处理
+* Description
+Get block height
+* Input parameters
+* Output parameters
+Current block height
+* Exception handling
 
-|   错误码 |  发生场景        |
+| Error Code |  Occurrence Scenario        |
 |:--------| :------     |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 9 Block getBlock(int height)
-* 描述
-根据高度获得区块
-* 输入参数
-区块高度
-* 输出参数
-该高度对应的区块
-* 异常处理
+* Description
+Get block by height
+* Input parameters
+Block height
+* Output parameters
+The block corresponding to the height
+* Exception handling
 
-|   错误码 |  发生场景        |
+| Error Code |  Occurrence Scenario        |
 |:--------| :------       |
 |58023    | Invalid url |
 |53002    | Block deserialize failed|
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 10 Block getBlock(String hash)
-* 描述
-根据区块hash获得区块
-* 输入参数
-区块hash
-* 输出参数
-该区块hash对应的区块
-* 异常处理
+* Description
+Get block by block hash 
+* Input parameters
+Block hash
+* Output parameters
+The block corresponding to the block hash
+* Exception handling
 
-|   错误码 |  发生场景        |
+| Error Code |  Occurrence Scenario        |
 |:--------| :------       |
 |58023    | Invalid url |
 |53002    | Block deserialize failed|
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 11 Object   getBalance(String address)
-* 描述
-根据账户address获得余额
-* 输入参数
-账户地址
-* 输出参数
-账户余额
-* 异常处理
+* Description
+Get balance by account address
+* Input parameters
+Account address
+* Output parameters
+Account balance
+* Exception handling
 
-|   错误码 |  发生场景        |
+| Error Code |  Occurrence Scenario        |
 |:--------| :------      |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 12 Object getBlockJson(int height)
-* 描述
-根据区块高度获得区块数据的JSON格式数据
-* 输入参数
-区块高度
-* 输出参数
-该区块高度对应的区块json数据
-* 异常处理
+* Description
+Get JSON format data of block data by block height
+* Input parameters
+Block height
+* Output parameters
+Block json data corresponding to the block height
+* Exception handling
 
-|   错误码 |  发生场景      |
+|  Error Code |  Occurrence Scenario        |
 |:--------| :------    |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 13 Object getBlockJson(String hash)
-* 描述
-根据区块hash获得区块数据的JSON格式数据
-* 输入参数
-区块hash
-* 输出参数
-该区块hash对应的区块json对象
-* 异常处理
+* Description
+Get JSON format data of block data by block hash
+* Input parameters
+Block hash
+* Output parameters
+Block json data corresponding to the block hash
+* Exception handling
 
-|   错误码 |  发生场景      |
+|  Error Code |  Occurrence Scenario        |
 |:--------| :------     |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 14 Object getContract(String hash)
-* 描述
-根据合约hash获得合约代码
-* 输入参数
-合约hash
-* 输出参数
-该合约hash对应的合约代码
-* 异常处理
+* Description
+Get contract code by contract hash
+* Input parameters
+Contract hash
+* Output parameters
+Contract code corresponding to the contract hash
+* Exception handling
 
-|   错误码 |  发生场景      |
+|  Error Code |  Occurrence Scenario        |
 |:--------| :------                                               |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 15 Object getContractJson(String hash)
-* 描述
-根据合约hash获得合约代码json数据
-* 输入参数
-合约hash
-* 输出参数
-该合约hash对应的合约代码
-* 异常处理
+* Description
+Get contract code json data by contract hash
+* Input parameters
+Contract hash
+* Output parameters
+Contract code (Json) corresponding to the contract hash
+* Exception handling
 
-|   错误码 |  发生场景      |
+|  Error Code |  Occurrence Scenario        |
 |:--------| :------                                               |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 16 Object getSmartCodeEvent(int height)
-* 描述
-根据区块高度获得合约事件
-* 输入参数
-区块高度
-* 输出参数
-事件对象
-* 异常处理
+* Description
+Get contract event by block height
+* Input parameters
+Block height
+* Output parameters
+Event object
+* Exception handling
 
-|   错误码 |  发生场景      |
+|  Error Code |  Occurrence Scenario        |
 |:--------| :------     |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 17 Object getSmartCodeEvent(String hash)
-* 描述
-根据交易hash获得合约事件
-* 输入参数
-交易hash
-* 输出参数
-事件对象
-* 异常处理
+* Description
+Get contract event by transaction hash
+* Input parameters
+Transaction hash
+* Output parameters
+Event object
+* Exception handling
 
-|   错误码 |  发生场景      |
+|  Error Code |  Occurrence Scenario        |
 |:--------| :------       |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 18 int getBlockHeightByTxHash(String hash)
-* 描述
-根据交易hash获得区块高度
-* 输入参数
-交易hash
-* 输出参数
-区块高度
-* 异常处理
+* Description
+Get block height by transaction hash
+* Input parameters
+Transaction hash
+* Output parameters
+Block height
+* Exception handling
 
-|   错误码 |  发生场景      |
+|  Error Code |  Occurrence Scenario        |
 |:--------| :------      |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 19 String getStorage(String codehash, String key)
-* 描述
-获得合约的key存储的数据
-* 输入参数
-codeHash是部署的合约的codeAddress,key要使用十六进制字符串
-* 输出参数
-合约的key存储的数据，String类型的值
-* 异常处理
+* Description
+Get the stored data by contract's key
+* Input parameters
+codeHash is the codeAddress of the deployed contract, and key is a hexadecimal string
+* Output parameters
+The data stored by the contract's key, and the value type is string 
+* Exception handling
 
-|   错误码 |  发生场景      |
+|  Error Code |  Occurrence Scenario        |
 |:--------| :------      |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 20 Object getMerkleProof(String txhash)
-* 描述
-获得交易hash的Merkle证明，证明该交易存在链上
-* 输入参数
-交易hash
-* 输出参数
-MerkleProof证明对象
-* 异常处理
+* Description
+Get Merkle proof of transaction hash to prove the transaction exists on the chain
+* Input parameters
+Transaction hash
+* Output parameters
+MerkleProof proof object
+* Exception handling
 
-|   错误码 |  发生场景      |
+|  Error Code |  Occurrence Scenario        |
 |:--------| :------     |
 |58023    | Invalid url |
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|

@@ -1,111 +1,111 @@
-# 数字资产ONT&ONG 交易
+# Digital Asset ONT&ONG Trading
 
-## 接口列表
+## Interface List
 
-| 方法名 | 参数 | 返回值类型 | 描述 |
+| Method Name | Arguments | Return Type | Description |
 |:--|:---|:---|:--|
-| sendTransfer       |String assetName, String sendAddr, String password, String recvAddr, long amount      | String|两个地址之间转移资产|
-|sendTransferToMany  |String assetName, String sendAddr, String password, String[] recvAddr, long[] amount  |String |给多个地址转移资产|
-|sendTransferFromMany|String assetName, String[] sendAddr, String[] password, String recvAddr, long[] amount|String |多个地址向某个地址转移资产|
-|sendOngTransferFrom |String sendAddr, String password, String to, long amount                              |String |转移ong资产|
+| sendTransfer       |String assetName, String sendAddr, String password, String recvAddr, long amount      | String|Transfer assets between two addresses|
+|sendTransferToMany  |String assetName, String sendAddr, String password, String[] recvAddr, long[] amount  |String |Transfer assets between multiple addresses|
+|sendTransferFromMany|String assetName, String[] sendAddr, String[] password, String recvAddr, long[] amount|String |Multiple addresses transfer assets to one address|
+|sendOngTransferFrom |String sendAddr, String password, String to, long amount |String |Transfer ong assets|
 
-## 接口定义
+## Interface definition
 
 #### sendTransfer
 
-* 描述
-转移资产
-* 输入参数
+* Description
+Transfer assets
+* Input parameters
 String assetName, String sendAddr, String password, String recvAddr, long amount
-assetName: 资产名，
-sendAddr: 发送方地址，
-password: 发送方密码，
-recvAddr: 接收方地址，
-amount: 转移的数量
-* 输出参数
-交易hash
-* 异常处理
+assetName: Asset name，
+sendAddr: Sender address，
+password: Sender password，
+recvAddr: Receiver address，
+amount: The amount of transfer
+* Output parameters
+Transaction hash
+* Exception handling
 
-|   错误码 |  发生场景        |                              
+| Error code | Occurrence scenario |                              
 |:--------| :------                                               
 |58012    | asset name error |
-|58004    | param error|
-|58023    | Invalid url|   
-|未知      | Ontology内部错误|                                  
+|58004    | param error |
+|58023    | Invalid url |   
+| Unknown | Ontology internal error |                                  
 
 #### sendTransferToMany
-* 描述
-向多个账户转移资产
-* 输入参数
+* Description
+Transfer assets to multiple accounts
+* Input parameters
 String assetName, String sendAddr, String password, String[] recvAddr, long[] amount
-assetName: 资产名，
-sendAddr: 发送方地址，
-password:发送方密码，
-recvAddr: 接收方地址数组，
-amount: 转移的数量数组
-amount和recvAddr一一对应
-* 输出参数
-交易hash
-* 异常处理
+assetName: Asset name，
+sendAddr: Sender address，
+password: Sender password，
+recvAddr: Array of receiver address，
+amount: The amount array of transfer
+Amount and recvAddr correspond one by one 
+* Output parameters
+Transaction hash
+* Exception handling
 
-|   错误码 |  发生场景        |                              
+| Error code | Occurrence scenario |                              
 |:--------| :------                                               
 |58012    | asset name error |
-|58004    | param error|
-|58023    | Invalid url|   
-|4XXXX    | Ontology错误|  
+|58004    | param error |
+|58023    | Invalid url |   
+| Unknown | Ontology error |  
 
 #### sendTransferFromMany
-* 描述
-从多个账户向某个账户转移资产
-* 输入参数
+* Description
+Transfer assets from multiple accounts to one account
+* Input parameters
 String assetName, String[] sendAddr, String[] password, String recvAddr, long[] amount
-assetName: 资产名，
-sendAddr: 发送方地址数组，
-password: 发送方密码数组，
-recvAddr: 接收方地址，
-amount: 转移的数量数组
-amount、sendAddr和password一一对应
-* 输出参数
-交易hash
-* 异常处理
+assetName: Asset name，
+sendAddr: Array of sender address，
+password: Array of sender password，
+recvAddr: Receiver address，
+amount: The amount array of transfer
+Amount, sendAddr and password correspond one by one
+* Output parameters
+Transaction hash
+* Exception handling
 
-|   错误码 |  发生场景        |                              
+| Error code | Occurrence scenario |                              
 |:--------| :------                                               
 |58012    | asset name error |
 |58004    | param error|
 |58023    | Invalid url|   
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
 #### sendOngTransferFrom
-* 描述
-提取ong到某个账户
-* 输入参数
+* Description
+Extract ong to one account
+* Input parameters
 String sendAddr, String password, String to, long amount
-sendAddr: 发送方地址，
-password: 发送方密码，
-to: 接收方地址，
-amount: 转移的数量
-* 输出参数
-交易hash
-* 异常处理
+sendAddr: Sender address，
+password: Sender password，
+to: Receiver address，
+amount: The amount of transfer
+* Output parameters
+Transaction hash
+* Exception handling
 
-|   错误码 |  发生场景        |                              
+| Error code | Occurrence scenario |                              
 |:--------| :------                                               
 |58012    | asset name error |
 |58004    | param error|
 |58023    | Invalid url|   
-|4XXXX    | Ontology错误|
+|4XXXX    | Ontology error|
 
-## 交易说明
+## Transaction description
 
-ont和ong合约address
+Ont and ong contract address
 ```
 private final String ontContract = "ff00000000000000000000000000000000000001";
 private final String ongContract = "ff00000000000000000000000000000000000002";
 ```
 
-State类字段如下：
+State class field：
 ```
 public class State implements Serializable {
     public byte version;
@@ -116,7 +116,7 @@ public class State implements Serializable {
   }
 ```
 
-Transfers类字段如下：
+Transfers class field：
 ```
 public class Transfers implements Serializable {
     public byte version = 0;
@@ -128,8 +128,7 @@ public class Transfers implements Serializable {
     ...
   }
 ```
-
-Contarct字段如下
+Contarct field:
 
 ```
 public class Contract implements Serializable {
@@ -151,7 +150,7 @@ public class Contract implements Serializable {
     ....
   }
 ```
-* 构造参数paramBytes
+* Construct parameters paramBytes
 
 ```
 State state = new State(senderAddress, receiveAddress, new BigInteger(amount));
@@ -159,7 +158,7 @@ Transfers transfers = new Transfers(new State[]{state});
 Contract contract = new Contract((byte) 0,null, Address.parse(contractAddr), "transfer", transfers.toArray());
 byte[] paramBytes = contarct.toArray();
 ```
-* 构造交易
-请参考智能合约构造交易部分
-* 发送交易
-请参考智能合约发送交易部分
+* Construct transaction
+Please refer to the section of construction transaction of smart contract 
+* Send transaction 
+Please refer to the section of send transaction of smart contract 

@@ -1,10 +1,10 @@
-# 本体 SDK 开发标准
+# Ontology SDK Development Standard
 
 
 
-## 1.1 公私钥对生成
+## 1.1 Public and Private Key Pair Generation
 
-目前Ontology支持的算法
+Current Ontology supported algorithms:
 
 | ID | Algorithm |
 |:--|:--|
@@ -12,7 +12,7 @@
 |0x13|SM2|
 |0x14|EdDSA|
 
-ONT可签名方案说明( with 前面是散列算法，后面是签名算法)，支持的signature schemes：
+ONT signable schemes description( hash algorithm + with + signature algorithm)，supported signature schemes：
 ```
 SHA224withECDSA
 SHA256withECDSA
@@ -27,29 +27,28 @@ SM3withSM2
 SHA512withEdDSA
 ```
 
-公私钥和签名的序列化方法请参考https://github.com/ontio/ontology-crypto/wiki/ECDSA
+For serialization method of public and private keys and signatures, please refer to https://github.com/ontio/ontology-crypto/wiki/ECDSA
 
 
-
-
-Account类功能：
-* 生成公私钥对：指定hash散列算法和签名算法，获得加密算法框架实例并初始化，产生公私钥对。
-* 根据公钥计算U160地址和base58地址
-* 公钥、私钥序列化
-* 私钥加解密
+Account class function:
+* Generate public and private key pairs: Specify a hash algorithm and signature algorithm, obtain an instance of the encryption algorithm framework and initialize it, and generate public and private key pairs.
+* Calculate U160 address and base58 address based on public key
+* Serialization of public and private key 
+* Private key encryption and decryption
 
 ```
 public class Account {
-    private KeyType keyType; //签名算法
-    private Object[] curveParams;//椭圆曲线域参数
-    private PrivateKey privateKey;//私钥
-    private PublicKey publicKey;//公钥
-    private Address addressU160;//U160地址，公钥转换而来
-    private SignatureScheme signatureScheme;//签名scheme
+    private KeyType keyType; //Signature algorithm
+    private Object[] curveParams;//Elliptic curve domain parameters
+    private PrivateKey privateKey;//Private key
+    private PublicKey publicKey;//Public key
+    private Address addressU160;//U160 address, transferred from public key 
+    private SignatureScheme signatureScheme;//Signature scheme
 ```
 
-* java获得公私钥对的示例
-方法一，随机生成公私钥：
+* An example of how java obtains public and private key pairs 
+Method 1, random generation of public and private keys:
+
 ```
 public Account(SignatureScheme scheme) throws Exception {
         Security.addProvider(new BouncyCastleProvider());
@@ -66,7 +65,7 @@ public Account(SignatureScheme scheme) throws Exception {
                     throw new Exception(ErrorCode.InvalidParams);
                 }
                 String curveName = (String) params[0];
-                paramSpec = new ECGenParameterSpec(curveName);//指定用于生成椭圆曲线 (EC) 域参数的参数集。
+                paramSpec = new ECGenParameterSpec(curveName);//Specify the set of parameters used to generate the elliptic curve (EC) domain parameters.
                 gen = KeyPairGenerator.getInstance("EC", "BC");
                 break;
             default:
@@ -74,7 +73,7 @@ public Account(SignatureScheme scheme) throws Exception {
                 throw new Exception(ErrorCode.UnsupportedKeyType);
         }
         gen.initialize(paramSpec, new SecureRandom());
-        KeyPair keyPair = gen.generateKeyPair();//随机生成公私钥对
+        KeyPair keyPair = gen.generateKeyPair();//Generate public and private key pairs randomly
         this.privateKey = keyPair.getPrivate();
         this.publicKey = keyPair.getPublic();
         this.keyType = keyType;
@@ -82,13 +81,13 @@ public Account(SignatureScheme scheme) throws Exception {
     }
 ```
 
-方法二，根据指定私钥生成公钥：
+Method 2: Generate a public key based on the specified private key:
 
 
 ```
-//生成私钥
+//Generate private key
 byte[] privateKey = ECC.generateKey();
-//根据私钥生成公钥
+//Generate a public key based on the specified private key
 public Account(byte[] data, SignatureScheme scheme) throws Exception {
         Security.addProvider(new BouncyCastleProvider());
         signatureScheme = scheme;
@@ -118,27 +117,28 @@ public Account(byte[] data, SignatureScheme scheme) throws Exception {
 ```
 
 
-## 1.2 账户地址生成
+## 1.2 Account Address Generation
 
 ```
-对于普通账户	： address = 0x01 + dhash160(pubkey)[1:]
-对于多重签名账户：涉及三个量 n, m, pubkeys.
-n为总公钥数，pubkeys为公钥的列表，m为需要的签名数量, 沿用Neo对多重签名的限制： n<=24
-依次序列化n，m，和pubkeys 得到byte数组 multi_pubkeys
+For normal accounts: address = 0x01 + dhash160(pubkey)[1:]
+For multi-signature accounts：involves three variables n, m, pubkeys.
+n is the total number of public keys, pubkeys is a list of public keys, m is the number of signatures required, and the Neo restriction on multiple signatures is used: n<=24
+Serialize n, m, and pubkeys in order to get the byte array multi_pubkeys
 address = 0x02 + dhash160(multi-pubkeys)[1:]
 
-
-对于合约账户				： address = CodeType + dhash160(code)[1:]
-neovm 类合约				： address = 0x80 + dhash160(code)[1:]
-wasm 类合约				： address = 0x90 + dhash160(code)[1:]
-后续其他vm类型合约也可以向后面拓展.
+For the contract accounts				： address = CodeType + dhash160(code)[1:]
+neovm contract				： address = 0x80 + dhash160(code)[1:]
+wasm contract				： address = 0x90 + dhash160(code)[1:]
+Subsequent other vm type contracts can also be extended later.
 ```
 
-交易在验签时根据地址前缀识别对应的签名算法，进行验签。 交易在执行时根据地址前缀识别对应的虚拟机类型，启动对应的vm运行合约。
-示例：
+When the transaction is verified, the corresponding signature algorithm is identified according to the address prefix.
+
+When executing the transaction, the corresponding virtual machine type is identified according to the address prefix, and the corresponding vm will start to run the contract.
+Example:
 
 ```
-//根据公钥计算的address
+//Address calculated by public key
 public static Address addressFromPubKey(byte[] publicKey) {
       try {
           byte[] bys = Digest.hash160(publicKey);
@@ -164,7 +164,7 @@ public static Address addressFromPubKey(byte[] publicKey) {
             throw new UnsupportedOperationException(ex);
         }
     }
-    //根据多重公钥计算address
+    //Address calculated by multiple public keys
    public static Address addressFromMultiPubKeys(int m, byte[]... publicKeys) throws Exception {
         if (m <= 0 || m > publicKeys.length || publicKeys.length > 24) {
             throw new IllegalArgumentException();
@@ -189,7 +189,7 @@ public static Address addressFromPubKey(byte[] publicKey) {
             throw new UnsupportedOperationException(ex);
         }
     }
-    //根据合约hex和虚拟机类型获得智能合约的address
+    //Get smart contract's address based on contract hex and virtual machine type
     public static String getCodeAddress(String codeHexStr,byte vmtype){
         Address code = Address.toScriptHash(Helper.hexToBytes(codeHexStr));
         byte[] hash = code.toArray();
@@ -198,9 +198,9 @@ public static Address addressFromPubKey(byte[] publicKey) {
         return codeHash;
     }
 ```
-## 1.3 公私钥序列化
-私钥序列化：私钥转byte[]
-公钥序列化：keyType(1 byte) + Curve(1 byte) +  PublicKey Encoded
+## 1.3 Serialization of Public and Private Keys
+Serialization of Private Key：Private key to byte[]
+Serialization of Public Key：keyType(1 byte) + Curve(1 byte) +  PublicKey Encoded
 
 ```
     public byte[] serializePrivateKey() throws Exception {
@@ -255,9 +255,9 @@ public static Address addressFromPubKey(byte[] publicKey) {
         }
 ```
 
-## 1.4 私钥加解密
+## 1.4 Private key encryption and decryption
 
-采用AES的CTR 模式,参数如下： 
+Using AES's CTR mode, the parameters are as follows:
 
 | Notation | Description | 
 |:-- |:---|
@@ -284,7 +284,7 @@ IV = k[0:16]
 e = k[32:64], as the AES key
 c = AESEncrypt(IV, e, sk), output c
 
-加密：
+Encryption：
 ```
     public String exportCtrEncryptedPrikey(String passphrase, int n) {
         int N = n;  // the CPU/Memory cost
@@ -296,11 +296,11 @@ c = AESEncrypt(IV, e, sk), output c
 
         byte[] addresshashTmp = Digest.sha256(Digest.sha256(address.getBytes()));
         byte[] addresshash = Arrays.copyOfRange(addresshashTmp, 0, 4);
-        //使用SCRYPT生成密钥
+        //Use SCRYPT to generate the key
         byte[] derivedkey = SCrypt.generate(passphrase.getBytes(StandardCharsets.UTF_8), addresshash, N, r, p, dkLen);
 
         byte[] derivedhalf2 = new byte[32];
-        byte[] iv = new byte[16];  //初始化向量 (IV)
+        byte[] iv = new byte[16];  //Initialize vector (IV)
         System.arraycopy(derivedkey, 0, iv, 0, 16);
         System.arraycopy(derivedkey, 32, derivedhalf2, 0, 32);
         try {
@@ -316,7 +316,7 @@ c = AESEncrypt(IV, e, sk), output c
     }
 ```
 
-解密：
+Decryption：
 ```
     public static String getCtrDecodedPrivateKey(String encryptedPriKey, String passphrase, String address, int n, SignatureScheme scheme) throws Exception {
         if (encryptedPriKey == null) {

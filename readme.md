@@ -1,15 +1,15 @@
-# 本体 SDK 开发标准
+# Ontology SDK Development Standard
 
-[账户及密钥管理规范](account.md)
+[Account and Key Management Specification](account.md)
 
-[交易规范](transaction.md)
+[Transaction Specification](transaction.md)
 
-[链交互功能规范](opchain.md)
+[Chain Interaction Function Specification](opchain.md)
 
-[数字身份功能规范](identity.md)
+[Digital Identity Function Specification](identity.md)
 
-[原生数字资产功能规范](asset.md)
+[Digital Asset Function Specification](asset.md)
 
-[智能合约支持规范](smartcontract.md)
+[Smart Contract Support Specification](smartcontract.md)
 
-[附件](appendix.md)
+[Appendix](appendix.md)

@@ -1,28 +1,28 @@
 
 
 
-# 附件
+# Appendix
 
-### 错误码定义
+### Error code definition
 
-| 返回代码 | 描述信息 | 说明 |
+| Return Code | Descriptive Information | Explanation |
 | :---- | ----------------------------- | ----------------- |
-| 0 | SUCCESS | 成功 |
-| 41001 | SESSION_EXPIRED | 会话无效或已过期（ 需要重新登录） |
-| 41002 | SERVICE_CEILING | 达到服务上限 |
-| 41003 | ILLEGAL_DATAFORMAT | 不合法数据格式 |
-| 41004 | INVALID_VERSION| 不合法的版本 |
-| 42001 | INVALID_METHOD | 无效的方法 |
-| 42002 | INVALID_PARAMS | 无效的参数 |
-| 43001 | INVALID_TRANSACTION | 无效的交易 |
-| 43002 | INVALID_ASSET | 无效的资产 |
-| 43003 | INVALID_BLOCK | 无效的块 |
-| 44001 | UNKNOWN_TRANSACTION | 找不到交易 |
-| 44002 | UNKNOWN_ASSET | 找不到资产 |
-| 44003 | UNKNOWN_BLOCK | 找不到块 |
-| 44004 | UNKNWN_CONTRACT | 找不到合约 |
-| 45001 | INTERNAL_ERROR | 内部错误 |
-| 47001 | SMARTCODE_ERROR| 智能合约错误 |
+| 0 | SUCCESS | Success |
+| 41001 | SESSION_EXPIRED | Session is invalid or has expired (require login again) |
+| 41002 | SERVICE_CEILING | Reach service ceiling |
+| 41003 | ILLEGAL_DATAFORMAT | Invalid data format |
+| 41004 | INVALID_VERSION| Illegal version |
+| 42001 | INVALID_METHOD | Invalid method |
+| 42002 | INVALID_PARAMS | Invalid parameters |
+| 43001 | INVALID_TRANSACTION | Invalid Transaction |
+| 43002 | INVALID_ASSET | Invalid asset |
+| 43003 | INVALID_BLOCK | Invalid block |
+| 44001 | UNKNOWN_TRANSACTION | Transaction not found |
+| 44002 | UNKNOWN_ASSET | Asset not found |
+| 44003 | UNKNOWN_BLOCK | Block not found |
+| 44004 | UNKNOWN_CONTRACT | Contract not found |
+| 45001 | INTERNAL_ERROR | Internal Error  |
+| 47001 | SMARTCODE_ERROR| Smart Contract Error |
 |51001  |  InvalidParams |Account Error,invalid params|
 |51002  |  UnsupportedKeyType |Account Error,unsupported key type|
 |51003  |  InvalidMessage |Account Error,invalid message|
@@ -73,7 +73,7 @@
 |58023  |  AESailed |ECIES Error,AES failed initialisation -|
 |59000  |  OtherError| other error|
 
-### NeoVM字节码
+### NeoVM bytecode
 
 ```
 public enum ScriptOp {

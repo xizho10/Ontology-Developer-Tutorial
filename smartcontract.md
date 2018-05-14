@@ -1,11 +1,11 @@
-# 本体 SDK 开发标准
+# Ontology SDK Development Standard
 
-## 4 智能合约交易
+## 4 Smart contract transaction
 
-目前Ontology链上可以运行Native、NEO和WASM合约，SDK要实现NEO和WASM合约的部署和调用交易，同时要实现Native合约的调用交易。
-> Note: 以下代码均是参考代码
+Currently, Native, NEO, and WASM contracts can be run on the Ontology chain. The SDK can implement the NEO and WASM contract deployment and invocation transactions, and at the same time implement the invocation transaction of the Native contract.
+> Note: The following code are reference code
 
-* Transaction类字段如下
+* Transaction class field
 
 ```
 public abstract class Transaction extends Inventory {
@@ -18,7 +18,7 @@ public abstract class Transaction extends Inventory {
     public Sig[] sigs = new Sig[0];
   }
 ```
-* 虚拟机类型
+* Virtual machine type
 
 ```
 Native(0xff),
@@ -26,9 +26,9 @@ NEOVM(0x80),
 WASMVM(0x90);
 ```
 
-### 4.1 Neo合约构造交易
+### 4.1 Neo contract construction transaction
 
-1. 读取合约abi文件
+1. Read the contract abi file
 
 ```
 InputStream is = new FileInputStream("C:\\ZX\\IdContract.abi.json");
@@ -38,19 +38,20 @@ is.close();
 String abi = new String(bys);
 AbiInfo abiinfo = JSON.parseObject(abi, AbiInfo.class);
 ```
-2. 构造参数
+2. Construction parameters
 
-将函数参数转换成虚拟机可以执行的字节码，详细的字节码数据请查看附件[附件](appendix.md)。
-假设调用某合约中函数需要如下参数：
-函数名，参数1，参数2
-转换成虚拟机能够识别的字节码：
-- 反序转换参数
- 如果遇到数组或者集合类型的数据，将数组或集合中的数据反序遍历并压入栈中，然后将该数组或者集合的大小压入栈中，然后在压入OP_PACK(0xC1)字节码;
+For converting the function parameters into bytecodes that can be executed by the virtual machine, detailed bytecode data can refer to the attachment[attachment](appendix.md).
 
-- 将参数压入栈中进行的操作（以Java中的数据类型为例）
-  - 如果参数是boolean类型数据。
+Assume that calling a function in a contract requires the following parameters:
+Function name, parameter 1, parameter 2
+Convert to a bytecode that the virtual machine can recognize:
+- Reverse parameters
+ If encountering array or set type data, the data in the array or set is traversed in reverse order and pushed into the stack. Next, pushing the size of the array or set into the stack, and finally pushing the OP_PACK (0xC1) byte code;
+
+Pushing parameters into the stack (take Java as an example)
+  - If the parameter is a boolean data type
   ```
-   //true对应的字节码是OP_1(0x51),false对应的字节码是OP_0(0x00)
+   //The bytecode corresponding to true is OP_1(0x51), and the bytecode corresponding to false is OP_0(0x00)
    public ScriptBuilder push(boolean b) {
       if(b == true) {
           return add(ScriptOp.OP_1);
@@ -58,24 +59,26 @@ AbiInfo abiinfo = JSON.parseObject(abi, AbiInfo.class);
       return add(ScriptOp.OP_0);
   }
   ```
-  - 如果参数是BigInteger
-  需要要将参数按照小端序转换成byte[],然后将byte[]转换成BigInteger对象，在进行如下操作：
-  判断是不是-1,如果是，往栈中压入OP_1NEGATE(0x4F)
-  判断是不是0,如果是，往栈中压入OP_0(0x00)
-  判断是不是大于0并且小于等于16,如果是，往栈中压入ScriptOp.OP_1.getByte() - 1 + number.byteValue()
-  其他的情况，往栈中压入该值的字节数组；
+  
+  - If the parameter is BigInteger
+  Need to convert the parameters in accordance with the little endian to byte[], and then convert byte[] to a BigInteger object, then do as follows:
+Judge if it is -1, if yes, push OP_1NEGATE(0x4F) into the stack
+Judge if it is 0, if yes, push OP_0 (0x00) into the stack
+Judge if it is greater than 0 and less than or equal to 16, if yes, push ScriptOp.OP_1.getByte() - 1 + number.byteValue() into the stack.
+In other cases, push the byte array of the value into the stack;
 
+  
   ```
   public ScriptBuilder push(BigInteger number) {
-  //判断是不是-1
+  //Judge if it is -1
   if (number.equals(BigInteger.ONE.negate())) {
       return add(ScriptOp.OP_1NEGATE);
   }
-  //判断是不是0
+  //Judge if it is 0
   if (number.equals(BigInteger.ZERO)) {
       return add(ScriptOp.OP_0);
   }
-  //判断是不是大于0并且小于等于16
+  //Judge if it is greater than 0 and less than or equal to 16
   if (number.compareTo(BigInteger.ZERO) > 0 && number.compareTo(BigInteger.valueOf(16)) <= 0) {
       return add((byte) (ScriptOp.OP_1.getByte() - 1 + number.byteValue()));
   }
@@ -83,11 +86,11 @@ AbiInfo abiinfo = JSON.parseObject(abi, AbiInfo.class);
   }
   ```
 
-  - 如果参数是byte数组
-  如果字节数组的长度小于OP_PUSHBYTES75，写入数组长度，然后写入数据数据
-  如果字节数组的长度小于0x100，往栈中压入OP_PUSHDATA1(0x4C)，写入数组长度，然后写入数据数据
-  如果字节数组的长度小于0x10000，往栈中压入OP_PUSHDATA2(0x4D)，写入数组长度，然后写入数据数据（详见下面例子）
-  如果字节数组的长度小于0x100000000L，往栈中压入OP_PUSHDATA4(0x4E)，写入数组长度，然后写入数据数据（详见下面例子）
+  - if the parameter is a byte array
+If the length of the byte array is less than OP_PUSHBYTES75, write the length of the array and then write the data
+If the length of the byte array is less than 0x100, push OP_PUSHDATA1(0x4C) into the stack, write the length of the array, and then write the data
+If the length of the byte array is less than 0x10000, push OP_PUSHDATA2(0x4D) into the stack, write the length of the array, and then write the data (see the following example)
+If the length of the byte array is less than 0x100000000L, push OP_PUSHDATA4(0x4E) into the stack, write the length of the array, and then write the data (see the following example)
 
   ```
    public ScriptBuilder push(byte[] data) {
@@ -113,10 +116,10 @@ AbiInfo abiinfo = JSON.parseObject(abi, AbiInfo.class);
   }
   ```
 
-3. 构造交易
-根据不同的虚拟机类型构造交易
+3. Construct transaction
+Construct transactions based on different virtual machine types
 ```
-//根据虚拟机类型构造交易
+//Construct transactions based on virtual machine types
 if(vmtype == VmType.NEOVM.value()) {
    Contract contract = new Contract((byte) 0, null, Address.parse(codeAddr), "", params);
    params = Helper.addBytes(new byte[]{0x67}, contract.toArray());
@@ -130,24 +133,24 @@ tx.vmType = vmtype;
 ...
 ```
 
-4. 交易签名
-a 将交易对象序列化成字节数据
-序列化方法请参考[smartcontract](smartcontract.md)
-b 对交易的字节数组进行两次sha256运算得到txhash
-c 对txHash进行签名
+4. Transaction signature
+a serialize transaction objects to byte data
+For the serialization method, please refer to [smartcontract](smartcontract.md)
+b Calculate sha256 twice for the transaction's byte array to get txhash
+c Sign the txhash
 
 ```
-//将交易对象中的字段值转换成字节数组txBytes
+//Convert field values ​​of transaction objects to byte array txBytes
 byte[] txBytes = tx.getByteArray();
-//对交易字节数组进行两次sha256
+//Calculate sha256 twice for the transaction byte array
 String txhash = Digest.sha256(Digest.sha256(txBytes))
-//对txhash做签名
+//Sign the txhash
 byte[] signature = tx.sign(accounts[i][j], getWalletMgr().getSignatureScheme());
-//给Transaction中的字段赋值
+//Assign a value to the field in transaction
 tx.sigs = sigs;
 ```
 
-交易签名结构体如下
+The transaction signature structure is as follows
 ```
 public class Sig implements Serializable {
     public byte[][] pubKeys = null;
@@ -156,29 +159,29 @@ public class Sig implements Serializable {
  }
 ```
 
-属性说明
-    pubKeys 签名的公钥
-    M 需要的签名的公钥数
-    sigData 签名数据
+Attribute description
+    pubKeys: Signed Public Key
+    M: The number of public keys required
+    sigData: Signature data
 
-5. 发送交易
-  1 将交易实例转换成字节数组
-  txBytes
+5. Send transactions
+1 Convert transaction instance to byte array
+  txBytes
   ```
-  //F是转换函数
+  //F is conversion function
   byte[] txBytes = F(tx);
   ```
 
-  2 将txBytes转换成十六进制字符串
+  2 Convert txBytes to a hexadecimal string
   ```
   String txHex = toHexString(txBytes);
   ```
-  3 发送交易(以restful为例)
-输入参数说明
-preExec true表示预执行，false表示非预执行
-action "sendrawtransaction"表示发送交易
-version 版本号，表示协议版本号
-data 交易参数
+  3 Send transactions (restful example)
+Input parameter description
+preExec true represents "pre-execution"，false represents "non-pre-execution."
+action "sendrawtransaction" represents "send transaction"
+version version number, indicating the protocol version number
+data transaction parameters
 ```
 public String sendTransaction(boolean preExec, String action, String version, String data) throws RestfulException {
         Map<String, String> params = new HashMap<String, String>();
@@ -197,14 +200,14 @@ public String sendTransaction(boolean preExec, String action, String version, St
     }
 ```
 
-### 4.2 Wasm合约构造交易
+### 4.2 Wasm contract construction transaction
 
-  1 构造调用合约中的方法需要的参数；
+  1 Constructs the parameters required by the method in the calling contract;
 
-依次将参数的值和类型放入集合中，然后转换成json字符串
+In order to put the value and type of the parameter into the set, and then convert to a json string
 
   ```
-  //合约函数中需要的参数json字符串
+  //The parameter json string required in the contract function
   public String buildWasmContractJsonParam(Object[] objs) {
         List params = new ArrayList();
         for (int i = 0; i < objs.length; i++) {
@@ -221,15 +224,16 @@ public String sendTransaction(boolean preExec, String action, String version, St
     }
   ```
 
-  2 构造交易
-输入参数说明: codeAddress是智能合约address，method是调用的合约函数名，params参数的字节形式，VmType.WASMVM.value() wasm合约类型值，
-基本流程：
-a 根据虚拟机类型构造params
-b 实例化InvokeCode
+  2 Construct transaction
+Input parameter description: codeAddress is the address of smart contract，method is the contract function name，params is the parameter byte form，VmType.WASMVM.value() is the wasm contract type value.
+Process:
+a Construct params based on virtual machine type
+b Instantiate InvokeCode
 ```
-//需要的参数：合约hash，合约函数名，虚拟机类型，费用实例
+//Required parameters: contract hash, contract function name, virtual machine type, cost instance
+
 public InvokeCode makeInvokeCodeTransaction(String codeAddr,String method,byte[] params, byte vmtype, Fee[] fees) throws SDKException {
-        //根据虚拟机类型构造params
+        //Constructs params based on virtual machine type
         if(vmtype == VmType.NEOVM.value()) {
             Contract contract = new Contract((byte) 0, null, Address.parse(codeAddr), "", params);
             params = Helper.addBytes(new byte[]{0x67}, contract.toArray());
@@ -237,7 +241,7 @@ public InvokeCode makeInvokeCodeTransaction(String codeAddr,String method,byte[]
             Contract contract = new Contract((byte) 1, null, Address.parse(codeAddr), method, params);
             params = contract.toArray();
         }
-        //实例化InvokeCode
+        //Instantiate InvokeCode
         InvokeCode tx = new InvokeCode();
         tx.code = params;  
         tx.vmType = vmtype;
@@ -246,37 +250,37 @@ public InvokeCode makeInvokeCodeTransaction(String codeAddr,String method,byte[]
     }
 ```
 
-  3 交易签名(如果是预执行不需要签名)；
-    和Neo合约中一样
+  3 Transaction signature(no signature required for pre-execution)；
+   The same as Neo contract
 
-* 示例：
+* Example：
 
 ```
-//设置要调用的合约地址codeAddress
+//Set the contract address - codeAddress 
 ontSdk.getSmartcodeTx().setCodeAddress(codeAddress);
 String funcName = "add";
-//构造合约函数需要的参数
+//Construct parameters required in the contract 
 String params = ontSdk.getSmartcodeTx().buildWasmContractJsonParam(new Object[]{20,30});
-//指定虚拟机类型构造交易
+//Specify the virtual machine type to construct transaction
 Transaction tx = ontSdk.getSmartcodeTx().makeInvokeCodeTransaction(ontSdk.getSmartcodeTx().getCodeAddress(),funcName,params.getBytes(),VmType.WASMVM.value(),new Fee[0]);
-//发送交易
+//Send transaction
 ontSdk.getConnectMgr().sendRawTransaction(tx.toHexString());
 
 ```
 
-### 4.3 智能合约执行过程推送
+### 4.3 Smart contract execution process push
 
-创建websocket线程，解析推送结果。
+Create a websocket thread and parse the push result.
 
 
-* 1 设置websocket链接
+* 1 Set websocket link
 
 
 ```
-//lock 全局变量,同步锁
+//lock global variable, synchronization lock
 public static Object lock = new Object();
 
-//获得ont实例
+//Get ont instance
 String ip = "http://127.0.0.1";
 String wsUrl = ip + ":" + "20335";
 OntSdk wm = OntSdk.getInstance();
@@ -286,16 +290,16 @@ wm.openWalletFile("OntAssetDemo.json");
 ```
 
 
-* 2 启动websocket线程
+* 2 Start websocket thread
 
 
 ```
-//false 表示不打印回调函数信息
+//false means the program does not need to print callback function information
 ontSdk.getWebSocket().startWebsocketThread(false);
 
 ```
 
-* 3 启动结果处理线程
+* 3 Start result processing thread
 
 
 ```
@@ -331,7 +335,7 @@ Thread thread = new Thread(
 ```
 
 
-* 4 每6秒发送一次心跳程序，维持socket链接
+* 4 Send a heartbeat every 6 seconds to maintain the socket link
 
 
 ```
@@ -351,12 +355,12 @@ for (;;){
 ```
 
 
-* 5 推送结果事例详解
+* 5 Push Events in detail
 
 
-以调用存证合约的put函数为例，
+Take the put function of the attest contract as an example.
 
-//存证合约abi.json文件部分内容如下
+//The content of attest contract abi.json is as follows:
 
 ```
 {
@@ -391,9 +395,8 @@ for (;;){
 }
 ```
 
-当调用put函数保存数据时，触发putRecord事件，websocket 推送的结果是{"putRecord", "arg1", "arg2", "arg3"}的十六进制字符串
-
-例子如下：
+When calling the put function to save the data, the putRecord event is triggered, and the result of the websocket push is a hexadecimal string of {"putRecord", "arg1", "arg2", "arg3"}
+Example：
 
 ```
 RECV: {
