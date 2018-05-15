@@ -1,18 +1,19 @@
-# Ontology SDK Development Standard
+# 本体 SDK 开发标准
 
-## Serialization and deserialization standard
+## 序列化和反序列化标准
 
 1. writeVarInt(long v)
 
-Serialize to bytes according to the actual length of v
-|v size|serialization result|length|
+根据v的实际长度序列化成字节
+
+|v大小|序列化结果|长度|
 |:--|:--|:--|
 | v < 0xFD | (byte)v | 1 bytes |
 | v <= 0xFFFF | 0xfd(1 byte) + (LittleEndian)v in 2 bytes | 3 bytes |
 | v <= 0xFFFFFFFF | 0xfe(1 byte) + (LittleEndian)v in 4 bytes | 5 bytes |
 | v > 0xFFFFFFFF | 0xff(1 byte) + (LittleEndian)v in 8 bytes | 9 bytes |
 
-Java example:
+Java语言示例
 ```
 if (v < 0xFD) {
             writeByte((byte)v);
@@ -29,17 +30,17 @@ if (v < 0xFD) {
 ```
 2. readVarInt(long max)
 
-The first byte is the length of max
+第一个字节是max的长度
 
 long fb = Byte.toUnsignedLong(readByte());
 
-|The size of first byte |Read method|
+|第一个字节大小|读取方法|
 |:--|:--|
-|fb == 0xFD| Read the next 2 bytes |
-|fb == 0xFE| Read the next 4 bytes |
-|fb == 0xFF| Read the next 8 bytes |
+|fb == 0xFD| 读取后面2个字节 |
+|fb == 0xFE| 读取后面4个字节 |
+|fb == 0xFF| 读取后面8个字节 |
 
-Java example:
+Java 代码示例
 ```
 long fb = Byte.toUnsignedLong(readByte());
         long value;
@@ -56,45 +57,46 @@ long fb = Byte.toUnsignedLong(readByte());
 
 3. WriteVarBytes(byte[] v)
 
-Serialization result: The length of v transfers to byte array + v
+序列化结果：v的长度转换字节数组 + v
 
-Java example:
+Java语言示例
 ```
 writeVarInt(v.length);
 writer.write(v);
 ```
 4. WriteString(String v)
-Serialization result: Serialization of length of byte array transferred by v + v transfers to byte array
-Java example:
+序列化结果：v转换成字节数组的长度序列化 + v转换成字节数组
+Java语言示例
 ```
 byte[] vBytes = v.getBytes("UTF-8")
 writeVarInt(vBytes.length);
 writer.write(vBytes);
 ```
 5. readVarBytes()
-First read the first byte,
-If the first byte is 0xFD, read the next 2 bytes
-If the first byte is 0xFE, read the next 4 bytes
-If the first byte is 0xFF, read the next 8 bytes
-Otherwise, read 1 byte
-Java example 
+首先读取第一个字节，
+如果第一个字节是0xFD,就读后面的2个字节
+如果第一个字节是0xFE,就读后面的4个字节
+如果第一个字节是0xFF,就读后面的8个字节
+否则，就读1个字节
+Java代码示例
 ```
 readBytes((int)readVarInt(0X7fffffc7));
 ```
-> Note: 0X7fffffc7 is the maximum value. If a value is greater than it, an exception should be thrown. 
+> Note: 0X7fffffc7是最大值，如果比该值大直接抛异常
+
 6. ReadBytes(int count)
-Read a fixed-length byte array
-Java example:
+读取固定长度的字节数组
+Java代码示例
 ```
 byte[] buffer = new byte[count];
 reader.readFully(buffer);
 ```
 
-## Serialization and deserialization of concrete classes
+## 具体类的序列化和反序列化
 
-* Serialization and deserialization of Block
+* Block的序列化和反序列化
 
-Block class field
+Block类字段如下
 ```
 public class Block extends Inventory {
 
@@ -116,7 +118,7 @@ public class Block extends Inventory {
   }
 ```
 
-Serialize and deserialize in the following order (Java example)
+按照下面的顺序进行序列化和反序列化(以Java代码序列化为例)：
 ```
 writer.writeInt(version);
 writer.writeSerializable(prevBlockHash);
@@ -141,8 +143,8 @@ for(int i=0;i<transactions.length;i++) {
 }
 ```
 
-* Serialization and deserialization of transaction 
-Transaction field:
+* Transaction的序列化和反序列化
+Transaction的字段如下
 ```
 public byte version = 0;
 public final TransactionType txType;
@@ -152,7 +154,7 @@ public Fee[] fee = new Fee[0];
 public long networkFee;
 public Sig[] sigs = new Sig[0];
 ```
-The order of serialization is as follows, and the order of deserialization please refer to serialization 
+序列化顺序是，反序列化请参考序列化
 ```
 writer.writeByte(version);
 writer.writeByte(txType.value());
@@ -164,10 +166,9 @@ writer.writeLong(networkFee);
 writer.writeSerializableArray(sigs);
 ```
 
-* Serialization and deserialization of DeployCode transactions
-The DeployCode transaction is a subclass of Transaction. The serialization order of the fields inherited from the transaction does not change.
-DeployCode own field:
-
+* DeployCode交易的序列化和反序列化
+DeployCode交易是Transaction的子类，DeployCode继承自Transaction的字段的序列化顺序不变。
+DeployCode自有字段如下
 ```
 public byte[] code;
 public byte vmType;
@@ -178,7 +179,7 @@ public String author;
 public String email;
 public String description;
 ```
-The serialization order of DeployCode's own fields is as follows, and the deserialization order is consistent with the serialization order.
+DeployCode自有字段的序列化顺序如下,反序列化顺序和序列化顺序一致。
 ```
 writer.writeByte(vmType);
 writer.writeVarBytes(code);
@@ -190,16 +191,16 @@ writer.writeVarString(email);
 writer.writeVarString(description);
 ```
 
-* Serialization and deserialization of InvokeCode transactions
-InvokeCode own field:
+* InvokeCode交易的序列化和反序列化
+InvokeCode自有字段如下
 ```
 public long gasLimit;
 public byte vmType;
 public byte[] code;
 ```
 
-The InvokeCode transaction is a subclass of Transaction. The serialization order of the fields inherited from the transaction does not change.
-The serialization order of InvokeCode's own fields is as follows, and the deserialization order is consistent with the serialization order.
+InvokeCode交易是Transaction的子类，InvokeCode继承自Transaction的字段的序列化顺序不变。
+InvokeCode自有字段的序列化顺序如下,反序列化顺序和序列化顺序一致。
 ```
 writer.writeLong(gasLimit);
 writer.writeByte(vmType);
