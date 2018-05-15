@@ -46,7 +46,7 @@ public class Account {
     private SignatureScheme signatureScheme;//Signature scheme
 ```
 
-* An example of how java obtains public and private key pairs 
+* An example of how java obtains public and private key pairs. 
 Method 1, random generation of public and private keys:
 
 ```
@@ -126,7 +126,7 @@ n is the total number of public keys, pubkeys is a list of public keys, m is the
 Serialize n, m, and pubkeys in order to get the byte array multi_pubkeys
 address = 0x02 + dhash160(multi-pubkeys)[1:]
 
-For the contract accounts				： address = CodeType + dhash160(code)[1:]
+For the contract accounts	： address = CodeType + dhash160(code)[1:]
 neovm contract				： address = 0x80 + dhash160(code)[1:]
 wasm contract				： address = 0x90 + dhash160(code)[1:]
 Subsequent other vm type contracts can also be extended later.
@@ -199,7 +199,7 @@ public static Address addressFromPubKey(byte[] publicKey) {
     }
 ```
 ## 1.3 Serialization of Public and Private Keys
-Serialization of Private Key：Private key to byte[]
+Serialization of Private Key：Private key to byte[].
 Serialization of Public Key：keyType(1 byte) + Curve(1 byte) +  PublicKey Encoded
 
 ```
