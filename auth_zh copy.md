@@ -89,7 +89,7 @@
      角色拥有者可以提前将角色代理提前撤回，`initiator`是发起者，`delegate`是角色代理人，initiator将代理给delegate的角色提前撤回。
 
 
-## 使用流程
+## AuthContractinterfacedesign
 
 1. 合约在初始化时通过调用`initContractAdmin`方法，设置此合约的管理员身份；
 2. 合约管理者分配角色，并绑定角色可以调用的函数；
