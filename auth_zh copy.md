@@ -1,102 +1,105 @@
 # Auth Contract
 
 * [Background](#Background)
-* [Application contract call rights management](#Application contract call rights management)
-* [AuthContractinterfacedesign](#AuthContractinterfacedesign)
-* [使用流程](#使用流程)
-* [合约示例(C#版)](#合约示例(C#版))
-
+* [Application contract calls rights management](#Application contract calls rights management)
+* [Auth Contract interface design](#Auth Contract interface design)
+* [Workflow](#Workflow)
+* [Contract Example (C#)](#Contract Example (C#))
 
 ## Background
 
-当前，智能合约的函数可以被任何人调用，这显然不符合现实要求。基于角色的权限管理的基本思想是，每个角色可以调用部分函数，每个实体可以被赋予多种角色（实体是由其ONT ID来标识）。
+Currently, the function of smart contract can be called by anyone, which obviously does not meet the actual requirements. The basic idea of ​​role-based rights management is that each role can call a partial function, and each entity can be assigned multiple roles (the entity is identified by its ONT ID).
 
-如果智能合约需要增加权限管理功能，那就必须记录合约中分配的角色，以及角色可调用的函数，哪些实体具有该角色等等信息。这个工作比较繁琐，可交由一个系统合约来管理。
+If the smart contract needs to add the rights management function, it must record the roles assigned in the contract, the functions that the role can call, which entity has this role, and so on. This work is tedious and can be managed by a system contract.
 
-在下文中，我们称所有需要权限管理功能的合约为*应用合约*（App Contract），此文档描述的系统合约为*Auth合约*（Auth Contract）。
+In the following, we say that the contract that requires rights management functions are *App Contract*, and the system contract described in this document are *Auth Contract*.
 
-## 应用合约调用权限管理
+## Application contract calls rights management
 
-*Auth合约*负责管理*应用合约*的函数调用权限。
+The *Auth contract* is responsible for managing the function call permissions of the *application contract*.
 
-- 记录应用合约的管理员信息，即记录`contract -> adminOntId`（kv类型数据）；
+- Record the administrator information of the application contract, i.e. record `contract -> adminOntId` (kv type data);
 
-- 记录应用合约的所有已分配的角色，及角色对应可调用的函数列表，即`role -> []funcName`；
+- Record all assigned roles of the application contract, and the list of functions that the role can call, i.e. `role -> []funcName`;
 
 - 记录实体ONT ID的权限token（包含**有效时间**、**级别**、**角色**）列表，即`ontID -> [](role, expireTime, level)`。
 
-## AuthContract接口设计
+- Record permission token of the entity's ONT ID (including **valid time**, **level**, **role**) list, i.e. `ontID -> [] (role, expireTime, level)`.
 
-### a. 设置应用合约管理员
 
-- 初始化合约管理员
+## Auth Contract interface design
+
+### a. Set up the administrator of an application contract 
+
+- Initialize the contract administrator
 
   ```json 
   bool initContractAdmin(byte[] adminOntID);
   ```
 
-  此方法应在应用合约内部调用。
+  This method should be called inside the application contract.
 
-- 转让合约管理权
+- Transfer contract management rights
 
 	```json
 	bool transfer(byte[] contractAddr, byte[] newAdminOntID, unsigned int keyNo);
 	```
-	contractAddr是目标合约的地址，
-    将管理权完全转让，newAdminOntID成为新管理员。
+	contractAddr is the address of the target contract.
+    When the management rights are completely transferred, newAdminOntID becomes the new administrator.
     
-    此函数必须由合约管理员调用，即将会以adminOntID名下编号为keyNo的公钥来验证交易签名是否合法。
+    This function must be called by the contract administrator, and the transaction signature is verified by the public key with the number keyNo of the adminOntID.
+    
+### b. Verify the contract call
 
-### b. 验证合约调用
+- Verify the validity of the contract call
 
-- 验证合约调用token的有效性
   	```json
   	bool verifyToken(byte[] contractAddr, byte[] callerOntID, byte[] funcName, unsigned int keyNo);
   	```
 
-	合约调用token包含三个部分：合约地址，调用者的ontID，函数名，以及发起此次调用的公钥编号keyNo。
+	Calling token by contract consists of three parts：the contract address, the caller's onID, the function name, and the public key number keyNo that initiated the call.
     
-### c. 合约权限分配
-- 为角色分配函数
+### c. Contract rights allocation
+- Assign a function to a role
+
 	```json
 	bool assignFuncsToRole(byte[] contractAddr, byte[] adminOntID, byte[] role, string[] funcNames, unsigned int keyNo);
 	```
-	contractAddr是目标合约的地址，adminOntID是目标合约的管理员ONT ID，role是角色，funcNames是目标合约中的函数名，keyNo是管理员发起此次调用所使用的公钥编号。
+	contractAddr is the address of the target contract, adminOntID is the administrator's ONT ID of the target contract, funcNames is the function name of the target contract, and keyNo is the public key number used by the administrator to initiate this call.
 	
-    必须由合约管理者调用，将所有函数自动绑定到role，若已经绑定，自动跳过，最后返回true。
+    This function must be called by the contract administrator, and it will automatically bind all functions to the role. if it is already bounded, the binding procedure automatically skip, and finally return true.
 
-- 绑定角色到实体身份
+- Bind a role to a entity identity
 	```json
 	bool assignOntIDsToRole(byte[] contractAddr, byte[] adminOntId, byte[] role, object[] ontIDs, unsigned int keyNo);
 	```
 
-	必须由合约管理者调用，ontIDs数组中的ONT ID被分配`role`角色，最后返回true。
-	在当前实现中，权限token的级别level默认等于2。
+	This function must be called by the contract administrator. The ONT ID in the ontIDs array is assigned the `role` and finally returns true.
+        In the current implementation, the level of the permission token is equal to 2 by default.
 
-### d. 合约权限代理
-- 将合约调用权代理给其他人
+### d. Contract permission delegate
+- Delegate contract calling rights to others
     ```json
     bool delegate(byte[] contractAddr, byte[] from, byte[] to, byte[] role, int period, int level, unsigned int keyNo);
     
 	bool withdraw(byte[] contractAddr, byte[] initiator, byte[] delegate,  byte[] role, unsigned int keyNo);
     ```
     
-    角色拥有者可以将角色代理给其他人，`from`是转让者的ONT ID，`to`是代理人的ONT ID，`role`表示要代理的角色，`period`参数指定委托任期时间（以second为单位）。
+    The role owner can delegate the role to others. `from` is the ONT ID of the transferor, `to` is the ONT ID of the delegator, `role` is the role of delegator, and the `period` parameter specifies the duration of the delegation. (use second as the unit).
    
-    代理人可以再次将其角色代理给更多的人，`level`参数指定委托层次深度。例如，
-     - level = 1: 此时代理人就无法将其角色再次代理出去；当前实现只支持此情况。
+      The delegator can delegate his role to more people, and the parameter `level` specifies the depth of the delegation level. E.g,
+    - level = 1: The delegator cannot delegate his role to others; the current implementation only supports this situation.
 
-     角色拥有者可以提前将角色代理提前撤回，`initiator`是发起者，`delegate`是角色代理人，initiator将代理给delegate的角色提前撤回。
+     The role owner can withdraw the role delegation in advance. `initiator` is the initiator, `delegate` is the role delegator, and the initiator can withdraw the role from the delegator in advance.
 
+## Auth Contract interface design
 
-## AuthContractinterfacedesign
+1. At initialization, the contract sets up the administrator by calling the `initContractAdmin` method;
+2. The contract administrator assigns roles and binds functions that each role can call;
+3. The contract administrator assigns roles to OntID;
+4. Before the specific function of the contract is executed, you can first verify whether the contract caller has the permission to call, that is, verify whether the caller provides the token; After the verification passes, you can execute the specific function.
 
-1. 合约在初始化时通过调用`initContractAdmin`方法，设置此合约的管理员身份；
-2. 合约管理者分配角色，并绑定角色可以调用的函数；
-3. 合约管理者为OntID分配角色；
-4. 合约的具体函数在执行之前，可以首先验证合约调用者是否拥有调用的权限，即验证该调用者是否提供了token；验证通过之后，可以执行具体函数。
-
-## 合约示例(C#版)
+## Contract Example(C#)
 
 ```json
 using Neo.SmartContract.Framework;
