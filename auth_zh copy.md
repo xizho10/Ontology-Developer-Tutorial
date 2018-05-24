@@ -2,7 +2,7 @@
 
 * [Background](#Background)
 * [Application contract call rights management](#Application contract call rights management)
-* [AuthContract interface design](#AuthContractinterfacedesign)
+* [AuthContractinterfacedesign](#AuthContractinterfacedesign)
 * [使用流程](#使用流程)
 * [合约示例(C#版)](#合约示例(C#版))
 
