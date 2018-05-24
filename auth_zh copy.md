@@ -1,7 +1,7 @@
 # Auth Contract
 
 * [Background](#Background)
-* [Application contract calls rights management](#Application contract calls rights management)
+* [Application contract calling permission management](#Application contract calling permission management)
 * [Auth Contract interface design](#Auth Contract interface design)
 * [Workflow](#Workflow)
 * [Contract Example (C#)](#Contract Example (C#))
@@ -14,15 +14,13 @@ If the smart contract needs to add the rights management function, it must recor
 
 In the following, we say that the contract that requires rights management functions are *App Contract*, and the system contract described in this document are *Auth Contract*.
 
-## Application contract calls rights management
+## Application contract calling permission management
 
-The *Auth contract* is responsible for managing the function call permissions of the *application contract*.
+The *Auth contract* is responsible for managing the function calling permissions of the *application contract*.
 
 - Record the administrator information of the application contract, i.e. record `contract -> adminOntId` (kv type data);
 
 - Record all assigned roles of the application contract, and the list of functions that the role can call, i.e. `role -> []funcName`;
-
-- 记录实体ONT ID的权限token（包含**有效时间**、**级别**、**角色**）列表，即`ontID -> [](role, expireTime, level)`。
 
 - Record permission token of the entity's ONT ID (including **valid time**, **level**, **role**) list, i.e. `ontID -> [] (role, expireTime, level)`.
 
@@ -57,9 +55,9 @@ The *Auth contract* is responsible for managing the function call permissions of
   	bool verifyToken(byte[] contractAddr, byte[] callerOntID, byte[] funcName, unsigned int keyNo);
   	```
 
-	Calling token by contract consists of three parts：the contract address, the caller's onID, the function name, and the public key number keyNo that initiated the call.
+	Calling tokens by contract consists of three parts：the contract address, the caller's onID, the function name, and the public key number keyNo that initiated the call.
     
-### c. Contract rights allocation
+### c. Contract permission allocation
 - Assign a function to a role
 
 	```json
@@ -77,8 +75,8 @@ The *Auth contract* is responsible for managing the function call permissions of
 	This function must be called by the contract administrator. The ONT ID in the ontIDs array is assigned the `role` and finally returns true.
         In the current implementation, the level of the permission token is equal to 2 by default.
 
-### d. Contract permission delegate
-- Delegate contract calling rights to others
+### d. Contract permission delegation
+- Delegate contract calling permission to others
     ```json
     bool delegate(byte[] contractAddr, byte[] from, byte[] to, byte[] role, int period, int level, unsigned int keyNo);
     
@@ -92,9 +90,9 @@ The *Auth contract* is responsible for managing the function call permissions of
 
      The role owner can withdraw the role delegation in advance. `initiator` is the initiator, `delegate` is the role delegator, and the initiator can withdraw the role from the delegator in advance.
 
-## Auth Contract interface design
+## Workflow
 
-1. At initialization, the contract sets up the administrator by calling the `initContractAdmin` method;
+1. At initialization, the contract can set up the administrator by calling the `initContractAdmin` method;
 2. The contract administrator assigns roles and binds functions that each role can call;
 3. The contract administrator assigns roles to OntID;
 4. Before the specific function of the contract is executed, you can first verify whether the contract caller has the permission to call, that is, verify whether the caller provides the token; After the verification passes, you can execute the specific function.
