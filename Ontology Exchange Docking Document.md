@@ -6,7 +6,7 @@ The outline of this document is as follows:
 
 * [Ontology Exchange Docking Document](#ontology-exchange-docking-document)
 	* [1.Deploy Ontology synchronization node](#1-Deploy-Ontology-synchronization-node)
-		* [Get from source code](#Get-from-source-code)
+		* [Get from source code](#get-from-source-code)
 		* [直接从release获取](#直接从release获取)
 		* [服务器部署](#服务器部署)
 			* [创建钱包](#创建钱包)
