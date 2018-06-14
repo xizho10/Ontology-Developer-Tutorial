@@ -1,107 +1,100 @@
 # Ontology Exchange Docking Document
 
-There are two kinds of assets in ONT: native assets and contract assets. Native assets are ont and ong. When docking with exchanges, it mainly deals with deposit and withdrawal of these two assets.
+There are two kinds of assets in ONT: native assets and contract assets. Native assets are ONT and ONG. When docking with the exchange, it mainly processes deposit and withdrawal of these two assets.
 
 The outline of this document is as follows:
 
 * [Ontology Exchange Docking Document](#ontology-exchange-docking-document)
-	* [1.Deploy Ontology synchronization node](#1-Deploy-Ontology-synchronization-node)
+	* [1.Deploy Ontology Synchronization Node](#1deploy-ontology-synchronization-node)
 		* [Get from source code](#get-from-source-code)
-		* [直接从release获取](#直接从release获取)
-		* [服务器部署](#服务器部署)
-			* [创建钱包](#创建钱包)
-			* [启动节点](#启动节点)
-	* [2. 使用CLI客户端](#2-使用cli客户端)
-		* [安全策略](#安全策略)
-		* [CLI说明](#cli说明)
-			* [创建钱包](#创建钱包)
-			* [生成充值地址等](#生成充值地址等)
-	* [3. 处理资产交易](#3-处理资产交易)
-		* [交易所需要开发的交易对接程序](#交易所需要开发的交易对接程序)
-		* [用户充值](#用户充值)
-		* [充值记录](#充值记录)
-		* [处理用户提现请求](#处理用户提现请求)
-	* [4. 使用Java SDK](#4-使用java-sdk)
-		* [账号管理](#账号管理)
-			* [不使用钱包管理：](#不使用钱包管理)
-				* [随机创建账号：](#随机创建账号)
-				* [根据私钥创建账号](#根据私钥创建账号)
-			* [使用钱包管理：](#使用钱包管理)
-		* [地址生成](#地址生成)
-		* [ONT和ONG转账](#ont和ong转账)
-			* [1. 初始化](#1-初始化)
-			* [2. 查询](#2-查询)
-				* [查询ONT，ONG余额](#查询ontong余额)
-				* [查询交易是否在交易池中](#查询交易是否在交易池中)
-				* [查询交易是否调用成功](#查询交易是否调用成功)
-			* [其他与链交互接口列表：](#其他与链交互接口列表)
-			* [3. ONT转账](#3-ont转账)
-				* [构造转账交易并发送](#构造转账交易并发送)
-				* [多次签名](#多次签名)
-				* [一转多或多转多](#一转多或多转多)
-			* [使用签名机签名](#使用签名机签名)
-			* [4. ONG转账](#4-ong转账)
-				* [ONG转账](#ong转账)
-				* [提取ONG](#提取ong)
-	* [5. 给用户分发ONG](#5-给用户分发ong)
-		* [什么是ONG](#什么是ong)
-		* [计算可提取的ONG总量](#计算可提取的ong总量)
-		* [给用户分发ONG](#给用户分发ong)
-		* [用户提取ONG](#用户提取ong)
-	* [6. 签名服务](#6-签名服务)
+		* [Get from release](#get-from-release)
+		* [Server deployment](#server-deployment)
+			* [Create wallet](#create-wallet)
+			* [Start up node](#start-up-node)
+	* [2. Use CLI Client](#2-use-cli-client)
+		* [Security policy](#security-policy)
+		* [CLI instruction](#cli-instruction)
+			* [Create wallet](#create-wallet)
+			* [Generate deposit address](#generate-deposit-address)
+	* [3. Process Asset Transactions](#3-process-asset-transactions)
+		* [Transaction docking program the exchange needs to develop](#transaction-docking-program-the-exchange-needs-to-develop)
+		* [User deposit](#user-deposit)
+		* [Deposit record](#deposit-record)
+		* [Process user withdrawal request](#process-user-withdrawal-request)
+	* [4. Java SDK Tutorials](#4-java-sdk-tutorials)
+		* [Account management](#account-management)
+			* [Do not use wallet management](#do-not-use-wallet-management)
+				* [Create account randomly](#create-account-randomly)
+				* [Create account based on private key](#create-account-based-on-private-key)
+			* [Use wallet management](#use-wallet-management)
+		* [Address generation](#address-generation)
+		* [ONT and ONG transfer](#ont-and-ong-transfer)
+			* [1. Initialization](#1-initialization)
+			* [2. Query](#2-query)
+				* [Query ONT, ONG Balance](#query-ont,-ong-balance)
+				* [Query whether the transaction is in the transaction pool](#query-whether-the-transaction-is-in-the-transaction-pool)
+				* [Query whether the transaction is successful](#query-whether-the-transaction-is-successful)
+			* [The list of chain interaction interface](#the-list-of-chain-interaction-interface)
+			* [3. ONT transfer](#3-ont-transfer)
+				* [Construct transfer transaction and send](#construct-transfer-transaction-and-send)
+				* [Multiple signatures](#multiple-signatures)
+				* [One to multiple or multiple to multiple](#one-to-multiple-or-multiple-to-multiple)
+			* [Use signature server to sign](#use-signature-server-to-sign)
+			* [4. ONG transfer](#4-ong-transfer)
+				* [ONG transfer](#ong-transfer)
+				* [Withdraw ONG](#withdraw-ong)
+	* [5. Distribute ONG to Users](#5-distribute-ong-to-users)
+		* [What is ONG](#what-is-ong)
+		* [Calculate the amount of ONG that can withdraw](#calculate-the-amount-of-ong-that-can-withdraw)
+		* [Distribute ONG to users](#distribute-ONG-to-users)
+		* [Users withdraw ONG](#users-withdraw-ong)
+	* [6. Signature service](#6-signature-service)
 
 
+## 1.Deploy Ontology Synchronization Node
 
-​
-
-​
-
-​
-
-## 1.部署Ontology同步节点
-
-部署Ontology同步节点主要有两种方式：
+There are two ways to deploy Ontology synchronization nodes:
 
 ### Get from source code
 
-克隆ontology仓库到 **$GOPATH/src/github.com/ontio** 目录
+Clone ontology repository to  **$GOPATH/src/github.com/ontio** directory
 
 ```
 $ git clone https://github.com/ontio/ontology.git
 ```
 
-或者
+Or
 
 ```
 $ go get github.com/ontio/ontology
 ```
 
-用第三方包管理工具glide拉取依赖库
+Use the third-party package management tool glide to manage the dependent libraries
 
 ```
 $ cd $GOPATH/src/github.com/ontio/ontology
 $ glide install
 ```
 
-用make编译源码
+Compile source code with make
 
 ```
 $ make
 ```
 
-成功编译后会生成可执行程序
+An executable program will be generated after a successful compilation
 
-- `ontology`: 节点程序/以命令行方式提供的节点控制程序
+- `ontology`: Node program/node control program provided by command line
 
-### 直接从release获取
+### Get from release
 
  [release page](https://github.com/ontio/ontology/releases)
 
-### 服务器部署
+### Server deployment
 
-1. #### 创建钱包
+1. #### Create wallet
 
-   - 通过CLI，创建节点运行所需的钱包文件 wallet.dat
+   - Create the wallet file - wallet.dat that is required for nodes running through the CLI
 
      ```
      $ ./ontology-linux account add -d
@@ -123,7 +116,7 @@ $ make
 
      ​
 
-   - 目录结构
+   - Directory Structure
 
      ```
         $ tree
@@ -133,13 +126,13 @@ $ make
      ```
 
 
-2. #### 启动节点
+2. #### Start up node
 
-   由于同步节点只同步记账节点生成的区块，并不参与网络共识，因此可以通过--disableconsensus参数关闭网络共识模块
+   Since the synchronization node only synchronizes the blocks generated by the bookkeeping node and does not participate in the network consensus, the network consensus module can be turned off by the --disableconsensus parameter.
 
    ```./ontology --disableconsensus```
 
-   节点启动默认是关闭websocket和rest端口的，需要开放上述端口，可以配置以下参数
+   By default, the node startup will close the websocket and the rest port. If you want to open above-mentioned ports, you can configure the following parameters:
 
    ```
    RESTFUL OPTIONS:
@@ -153,13 +146,13 @@ $ make
 
    ​
 
-## 2. 使用CLI客户端
+## 2. Use CLI Client
 
-### 安全策略
+### Security policy
 
-强制要求：交易所必须使用白名单或防火墙以屏蔽外部服务器请求，否则会有重大安全隐患。
+Mandatory: The exchange must use a whitelist or firewall to block external server requests, otherwise there will be a serious security risk.
 
-CLI 本身不提供远程开关钱包功能，打开钱包时也没有验证过程。因此，安全策略由交易所根据自身情况制定。由于钱包要一直保持打开状态以便处理用户的提现，因此，从安全角度考虑，钱包必须运行在独立的服务器上，并参考下表配置好端口防火墙。
+The CLI does not provide remote open/close wallet function and there is no verification process when opening the wallet. Therefore, the security policy needs to be set by the exchange based on its own situation. Since the wallet must remain open in order to process the users' withdrawal, from a security point of view, the wallet must be running on a separate server, and the exchange configures the firewall with reference to the following table.
 
 |               | Mainnet default port |
 | ------------- | -------------------- |
@@ -168,11 +161,11 @@ CLI 本身不提供远程开关钱包功能，打开钱包时也没有验证过�
 | Json RPC port | 20336                |
 | Node port     | 20338                |
 
-### CLI说明
+### CLI instruction
 
-#### 创建钱包
+#### Create wallet
 
-交易所需要创建一个在线钱包管理用户充值地址。钱包是用来存储账户（包含公钥和私钥）、合约地址等信息，是用户持有资产的最重要的凭证，一定要保管好钱包文件和钱包密码，不要丢失或泄露。 交易所不需要为每个地址创建一个钱包文件，通常一个钱包文件可以存储用户所有充值地址。也可以使用一个冷钱包（离线钱包）作为更安全的存储方式。
+The exchange needs to create an online wallet to manage user deposit address. A wallet is used to store account (including public and private keys), contract address and other information, which is the most important certificate for users to hold assets. It is important to keep wallet files and wallet passwords safe and prevent them from loss or disclosure. The exchange does not need to create a wallet file for each address. Usually a wallet file can store all the user's deposit addresses. You can also use a cold wallet (offline wallet) as a more secure storage.
 
 ```
 $ ./ontology account add -d
@@ -186,22 +179,21 @@ Public key: 120202a1cfbe3a0a04183d6c25ceff1e34957ace6e4899e4361c2e1a2bc3c817f909
 Signature scheme: SHA256withECDSA	
 ```
 
-**ONT的公钥和私钥生成算法和NEO一致，同一个私钥对应的ONT和NEO的公钥地址是相同的。**
+**The public and private key generation algorithms of ONT are consistent with NEO. The public key addresses of ONT and NEO corresponding to the same private key are the same.**
 
-####  生成充值地址等
+####  Generate deposit address
 
-一个钱包可以存储多个地址，交易所需要为每个用户生成一个充值地址。
+A wallet can store multiple addresses, and the exchange needs to generate a deposit address for each user.
 
-充值地址有两种生成方式：
+There are two ways to generate deposit addresses:
 
-- 用户第一次充值（ONT/ONG）时，程序动态创建 ONT 地址，优点：无需人工定期创建地址；缺点：不方便备份钱包。
+When the user first deposits (ONT/ONG), the program dynamically creates the ONT address. Advantages: No manual creation of addresses is required. Disadvantages: It is inconvenient to back up the wallet.
+  
+  To create an address dynamically, you can use the Java SDK's implementation and the program will return the created address. Please refer to Java SDK [Create account randomly](#create-account-randomly)
 
-  要动态创建地址，可以使用 Java SDK 的 实现，程序会返回创建的地址。参照 Java SDK  [随机创建账号](#随机创建账号)
+The exchange creates a batch of ONT addresses in advance and assigns the user an ONT address when the user deposits for the first time (ONT/ONG). Advantages: It is easy to back up wallet; disadvantages: Manually create ONT address when the address is insufficient.
 
-
-- 交易所提前创建一批 ONT 地址，并在用户第一次充值（ONT/ONG）时，给用户分配一个 ONT 地址。优点：方便备份钱包；缺点：当地址不足时需要人工创建 ONT 地址。
-
-  要批量创建地址，执行 CLI 的 ./ontology account add -n [n]  -w [wallet file]命令，-d 方括号为可选参数，默认值为 1 -w 为指定钱包文件，默认为wallet.dat。例如要一次创建100个地址:
+  To create a batch of addresses, executing the ./ontology account add -n [n] -w [wallet file] command in the CLI. The -d bracket is an optional parameter and the default value is 1. -w specifies the wallet file and the default file is wallet.dat. For example, to create 100 addresses at one time:
 
 ```
 $ ./ontology account add -n 100 -d -w wat.dat
@@ -234,39 +226,37 @@ Signature scheme: SHA256withECDSA
 
 
 
-## 3. 处理资产交易
+## 3. Process Asset Transactions
 
-### 交易所需要开发的交易对接程序
+### Transaction docking program the exchange needs to develop
 
-1. 使用CLI / API监控新区块
-2. 根据交易信息完成用户充值
-3. 存储交易所相关交易记录
+1. Monitor new blocks using CLI/API
+2. Complete user deposit according to the transaction information 
+3. Store transaction records of exchanges
 
-### 用户充值
+### User deposit
 
-关于用户充值，交易所需要了解以下内容：
+For user deposit, the exchange needs to understand the following:
 
-- 一般来讲，由于每个交易所的策略不同，交易所充值地址里的余额可能并不等于用户在交易所里的余额。
+- In general, due to the different strategies of each exchange, the balance in the exchange's deposit address may not equal to the user's balance in the exchange.
 
-- Ontology 地址中包含 ONT 和 ONG 两种资产，交易所记录用户充值时需要判断充值资产的资产类型，以免把 ONT 和ONG 的充值弄混。
+- Ontology address contains ONT and ONG assets. When processing the users' deposit, the exchange needs to judge the asset type so as not to mix up the ONT and ONG deposit.
 
-- Ontology钱包是一个全节点，要保持在线才能同步区块，可以通过CLI命令查看当前区块高度， 判断节点状态。
+- The Ontology wallet is a full node. To synchronize the blocks, the wallet needs to be online. You can view the current block height through the CLI command and judge the node status.
+
 
   ```
   $ ./ontology info curblockheight
   CurrentBlockHeight:2
   ```
 
-  ​
+- Transfers between users within the exchange do not need to go through the blockchain, so the exchange can directly modify the users' balance in the database. Only deposit and withdrawal need to go through the blockchain.
 
+Example:
 
-- 交易所内的用户之间转账不需要通过区块链，而可以直接修改数据库中的用户余额进行，只有充值提现才上链。
+1. A user deposits tokens to the address - ```TA8MoGmzS4T6g3T1CMGEVFiNGkZnn7ixw9```
 
-例：
-
-1. 用户向```TA8MoGmzS4T6g3T1CMGEVFiNGkZnn7ixw9```地址进行充值
-
-2. 通过CLI ```./ontology info block <block number | block hash>```  监控区块信息：
+2. Monitor block information by CLI ```./ontology info block <block number | block hash>```  
 
    ```
    $ ./ontology info block 209304
@@ -327,7 +317,7 @@ Signature scheme: SHA256withECDSA
 
    ```
 
-3. 通过CLI ```./ontology info status```根据Transaction Hash 取得block中的所有Transaction信息
+3. Get all transaction information in the block according to Transaction Hash by CLI  ```./ontology info status```
 
 ```
 $ ./ontology info status f4b39ac8f39e4eb92bbb8cc4f46b427bf68624a225c56fc0fa6310a6012538f0
@@ -350,39 +340,39 @@ Transaction states:
 }
 ```
 
-判断“State” 为 1  代表交易成功，为 0 代表明确失败
+"State" is 1 representing transaction success, and 0 representing the failure
 
-解析“Notify"数组：
+Parse the "Notify" array:
 
-​     ContractAddress：合约地址	```0000000000000000000000000000000000000001``` 为ONT
+​     ContractAddress: Contract address：	```0000000000000000000000000000000000000001```  is for ONT
 
-​						        ```0000000000000000000000000000000000000002``` 为ONG
+​						        ```0000000000000000000000000000000000000002``` is for ONG
 
-​     States：数组
+​     States：array
 
-​                第一个元素："transfer" 代表转账操作
+​                The first element: "transfer" represents a transfer operation
 
-​		第二个元素：为from 地址
+​		The second element: the from address
 
-​                第三个元素：为to 地址
+​                The third element: the to address
 
-​                第四个元素：为转账数量（**ONT为实际数量为整数，ONG为实际数量×10^9**）
+​                The fourth element: the number of transfers （**The actual number of ONT is the number of ONT * 1, and the actual number of ONG is the number of ONG * 10^9**）
 
-只需过滤 to 地址为交易所为用户生成的充值地址，即可取得用户的充值记录
+To obtain the user's deposit record, you can filter the to address that is generated by the exchange for users. 
 
-### 充值记录
+### Deposit record
 
-同用户充值，交易所需要写代码监控每个区块的每个交易，在数据库中记录下所有充值提现交易。如果有充值交易就要修改数据库中的用户余额。
+Same as user deposit, the exchange needs to write code to monitor all transactions in all blocks, and record all deposit and withdrawal transactions in the database. If there is a deposit transaction, the exchange needs to modify the corresponding user's balance in the database.
 
 
 
-### 处理用户提现请求
+### Process user withdrawal request
 
-关于用户提现，交易所需要完成以下操作：
+With regard to user withdrawal, the exchange needs to complete the following operations:
 
-1. 记录用户提现，修改用户账户余额。
+1. Record user withdrawals and modify users' account balances.
 
-2. 使用CLI命令对用户提现地址进行转账：
+2. Use the CLI command to transfer tokens to the user's withdrawal address:
 
    ```
    $ ./ontology asset transfer --from TA5zt4PrSzjWA7DaVHVw2nhxH5ZY9uQiGq --to TA8MoGmzS4T6g3T1CMGEVFiNGkZnn7ixw9 --amount 100
@@ -398,34 +388,33 @@ Transaction states:
 
    ```
 
-   命令的参数列表如下：
+  The list of parameters for the command is as follows:
 
    --wallet, -w  
-   wallet指定转出账户钱包路径，默认值为:"./wallet.dat"
-
+   Wallet specifies the wallet path of transfer-out account. The default value is: "./wallet.dat".
+   
    --gasprice  
-   gasprice参数指定转账交易的gas price。交易的gas price不能小于接收节点交易池设置的最低gas price，否则交易会被拒绝。默认值为0。当交易池中有交易在排队等待打包进区块时，交易池会按照gas price有高到低排序，gas price高的交易会被优先处理。
-
+   The gasprice parameter specifies the gas price of the transfer transaction. The gas price of the transaction cannot be less than the lowest gas price set by node's transaction pool, otherwise the transaction will be rejected. The default value is 0. When there are transactions that are queued for packing into the block in the transaction pool, the transaction pool will deal with transactions according to the gas price and transactions with high gas prices will be prioritized. 
+   
    --gaslimit  
-   gaslimit参数指定转账交易的gas limit。交易的gas limit不能小于接收节点交易池设置的最低gas limit，否则交易会被拒绝。gasprice * gaslimit 为账户实际支持的ONG 费用。 默认值为30000。
-
+   The gaslimit parameter specifies the gas limit of the transfer transaction. The gas limit of the transaction cannot be less than the minimum gas limit set by the node's transaction pool, otherwise the transaction will be rejected. Gasprice * gaslimit is actual ONG costs. The default value is 30000.
+   
    --asset  
-   asset参数指定转账的资产类型，ont表示ONT，ong表示ONG。默认值为ont。
-
+   The asset parameter specifies the asset type of the transfer. Ont indicates the ONT and ong indicates the ONG. The default value is ONT.
+   
    --from   
-   from参数指定转出账户地址。
-
+   The from parameter specifies the transfer-out account address.
+   
    --to  
-   to参数指定转入账户地址。
-
+   The to parameter specifies the transfer-in account address.
+   
    --amount   
-   amount参数指定转账金额。注意：由于ONT的精度是1，因此如果输入的是个浮点值，那么小数部分的值会被丢弃；ONG的精度为9，因此超出9位的小数部分将会被丢
-
+   The amount parameter specifies the transfer amount. Note: Since the precision of the ONT is 1, if the input is a floating-point value, then the value of the fractional part will be discarded; the precision of the ONG is 9, so the fractional part beyond 9 bits will be discarded.
    ​
 
-   确认交易结果：
+   Confirm the transaction result:
 
-   - 使用返回的交易hash直接查询：
+   - Use the returned transaction hash to query directly:
 
      ```
      ./ontology info status 9863485348031a333681d81e69bc93de66fe93dce3e17cd55a928025a23b512f
@@ -451,43 +440,43 @@ Transaction states:
 
      ​
 
-   - 同”用户充值“，监控新区块中的交易并过滤出交易所地址向用户提现地址转账的成功交易
+   - Same as ”user deposit“, monitor transactions in new blocks and filter out successful transactions which are from exchange addresses to user's withdrawal addresses
 
-3. 从返回的 Json 格式交易详情中提取交易ID，记录在数据库中。
+3. Extract the transaction ID from the returned transaction details of Json format and record it in the database.
 
-4. 等待区块链确认，确认后将提现记录标志为提现成功。
+4. Wait for the blockchain confirmation. After confirmation, marking the withdrawal record as successful withdrawal.
 
-   类似充值时对区块链的监控，提现也一样，监控时若发现区块中的某个交易 ID 与提现记录中的交易 ID 相等，则该交易已经确认，即提现成功。
+   Similar to monitoring the blockchain during deposit, the withdrawal process is also the same. If a certain transaction ID in the block is found to be equal to the transaction ID in the withdrawal record during monitoring, the transaction is confirmed and the withdrawal is successful.
 
-5. 如果交易始终没有得到确认，即通过交易hash查询不到对应的event log,则需要
+5. If the transaction is not confirmed all the time, that is, the corresponding event log cannot be queried through the transaction hash, then
 
-   - 通过rpc/SDK接口查询交易是否在交易池中（参照[Java SDK:ONT和ONG转账](https://github.com/ontio/ontology-java-sdk/blob/master/docs/cn/sdk_get_start.md#2-%E5%8E%9F%E7%94%9F%E8%B5%84%E4%BA%A7ont%E5%92%8Cong%E8%BD%AC%E8%B4%A6))，若在，需要等待共识节点打包出块后再查询
+   - Check if the transaction is in the transaction pool via RPC/SDK interface（refer to[Java SDK:ONT and ONG transfer](https://github.com/ontio/ontology-java-sdk/blob/master/docs/cn/sdk_get_start.md#2-%E5%8E%9F%E7%94%9F%E8%B5%84%E4%BA%A7ont%E5%92%8Cong%E8%BD%AC%E8%B4%A6))，if it exists，you needs to wait for the consensus node to pack and then query
 
-   - 若不在，则可认为该交易失败，需要重新进行转账操作。
+   - If not, the transaction can be considered as failure and the transfer operation needs to be executed again.
 
-   - 若该交易长时间没有被打包，可能是由于gas price过低。
+
+   - If the transaction is not packaged for a long time, it may be due to the gas price being too low.
 
      ​
 
+## 4. Java SDK Tutorials
 
-## 4. 使用Java SDK
+Java SDK Tutorials: [Java SDK Tutorials](https://github.com/ontio/ontology-java-sdk/blob/master/docs/cn/sdk_get_start.md) 
 
-Java SDK 使用说明：[Java SDK 使用说明](https://github.com/ontio/ontology-java-sdk/blob/master/docs/cn/sdk_get_start.md) 
+### Account management
 
-### 账号管理
+#### Do not use wallet management
 
-#### 不使用钱包管理：
-
-##### 随机创建账号：
+##### Create account randomly
 
 ```java
 com.github.ontio.account.Account acct = new com.github.ontio.account.Account(ontSdk.defaultSignScheme);
-acct.serializePrivateKey();//私钥
-acct.serializePublicKey();//公钥
-acct.getAddressU160().toBase58();//base58地址
+acct.serializePrivateKey();//Private key
+acct.serializePublicKey();//Public key
+acct.getAddressU160().toBase58();//base58 address
 ```
 
-##### 根据私钥创建账号
+##### Create account based on private key
 
 ```java
 com.github.ontio.account.Account acct0 = new com.github.ontio.account.Account(Helper.hexToBytes(privatekey0), ontSdk.defaultSignScheme);
@@ -496,63 +485,60 @@ com.github.ontio.account.Account acct2 = new com.github.ontio.account.Account(He
 
 ```
 
+#### Use wallet management
 
-
-#### 使用钱包管理：
-
-[例子](https://github.com/ontio/ontology-java-sdk/blob/master/src/main/java/demo/WalletDemo.java) 
+[Example](https://github.com/ontio/ontology-java-sdk/blob/master/src/main/java/demo/WalletDemo.java) 
 
 ```java
 
-#### 在钱包中批量创建账号:
+#### Create a batch of account in the wallet
 ontSdk.getWalletMgr().createAccounts(10, "passwordtest");
 ontSdk.getWalletMgr().writeWallet();
 
-随机创建:
+Create account randomly
 AccountInfo info0 = ontSdk.getWalletMgr().createAccountInfo("passwordtest");
 
-通过私钥创建:
+Create account based on private key
 AccountInfo info = ontSdk.getWalletMgr().createAccountInfoFromPriKey("passwordtest","e467a2a9c9f56b012c71cf2270df42843a9d7ff181934068b4a62bcdd570e8be");
 
-获取账号
+Get account
 com.github.ontio.account.Account acct0 = ontSdk.getWalletMgr().getAccount(info.addressBase58,"passwordtest");
 
 ```
 
+### Address generation
 
-
-### 地址生成
-
-包括单签地址和多签地址,生成方式与NEO地址相同。
+The address includes single-signature address and multi-signature address, and the generation method is the same as the NEO address.
 
 ```
-单签地址生成：
+single-signature address generation
 String privatekey0 = "c19f16785b8f3543bbaf5e1dbb5d398dfa6c85aaad54fc9d71203ce83e505c07";
 String privatekey1 = "49855b16636e70f100cc5f4f42bc20a6535d7414fb8845e7310f8dd065a97221";
 String privatekey2 = "1094e90dd7c4fdfd849c14798d725ac351ae0d924b29a279a9ffa77d5737bd96";
 
-//生成账号，获取地址
+//Generate account and get address
 com.github.ontio.account.Account acct0 = new com.github.ontio.account.Account(Helper.hexToBytes(privatekey0), ontSdk.defaultSignScheme);
 Address sender = acct0.getAddressU160();
 
-//base58地址解码
+//base58 address decode
 sender = Address.decodeBase58("AVcv8YBABi9m6vH7faq3t8jWNamDXYytU2")；
 
-多签地址生成：
+//multi-signature address generation
 Address recvAddr = Address.addressFromMultiPubKeys(2, acct1.serializePublicKey(), acct2.serializePublicKey());
 
 
 ```
 
-| 方法名                  | 参数                      | 参数描述                       |
+| Method Name                  | Parameter                      | Parameter Description                       |
 | :---------------------- | :------------------------ | :----------------------------- |
-| addressFromMultiPubkeys | int m,byte\[\]... pubkeys | 最小验签个数(<=公钥个数)，公钥 |
+| addressFromMultiPubkeys | int m,byte\[\]... pubkeys | The minimum number of signatures (<=the number of public keys)，public key |
 
-### ONT和ONG转账
 
-参考例子：[例子](https://github.com/ontio/ontology-java-sdk/blob/master/src/main/java/demo/MakeTxWithoutWalletDemo.java)
+### ONT and ONG transfer
 
-#### 1. 初始化
+Example：[Example](https://github.com/ontio/ontology-java-sdk/blob/master/src/main/java/demo/MakeTxWithoutWalletDemo.java)
+
+#### 1. Initialization
 
 ```
 String ip = "http://polaris1.ont.io";
@@ -563,36 +549,34 @@ ontSdk.setDefaultConnect(wm.getRpc());
 
 ```
 
-#### 2. 查询
+#### 2. Query
 
-##### 查询ONT，ONG余额
+##### Query ONT, ONG Balance
 
 ```
 ontSdk.getConnect().getBalance("AVcv8YBABi9m6vH7faq3t8jWNamDXYytU2");
 
-查ont信息：
+View ONT information:
 System.out.println(ontSdk.nativevm().ont().queryName());
 System.out.println(ontSdk.nativevm().ont().querySymbol());
 System.out.println(ontSdk.nativevm().ont().queryDecimals());
 System.out.println(ontSdk.nativevm().ont().queryTotalSupply());
 
-查ong信息：
+View ONG information:
 System.out.println(ontSdk.nativevm().ong().queryName());
 System.out.println(ontSdk.nativevm().ong().querySymbol());
 System.out.println(ontSdk.nativevm().ong().queryDecimals());
 System.out.println(ontSdk.nativevm().ong().queryTotalSupply());
 
-
-
 ```
 
-##### 查询交易是否在交易池中
+##### Query whether the transaction is in the transaction pool
 
 ```
 ontSdk.getConnect().getMemPoolTxState("d441a967315989116bf0afad498e4016f542c1e7f8605da943f07633996c24cc")
 
 
-response 交易池存在此交易:
+response: the transaction is in the transaction pool
 
 {
     "Action": "getmempooltxstate",
@@ -615,7 +599,7 @@ response 交易池存在此交易:
     "Version": "1.0.0"
 }
 
-或 交易池不存在此交易
+Or the transaction is not in the transaction pool
 
 {
     "Action": "getmempooltxstate",
@@ -627,9 +611,9 @@ response 交易池存在此交易:
 
 ```
 
-##### 查询交易是否调用成功
+##### Query whether the transaction is successful
 
-查询智能合约推送内容
+Query pushing content of a smart contract
 
 ```
 ontSdk.getConnect().getSmartCodeEvent("d441a967315989116bf0afad498e4016f542c1e7f8605da943f07633996c24cc")
@@ -661,7 +645,7 @@ response:
 
 ```
 
-根据块高查询智能合约事件，返回有事件的交易hash
+You can use the block height to query a smart contract event, and the event transaction hash will be returned.
 
 ```
 ontSdk.getConnect().getSmartCodeEvent(10)
@@ -682,88 +666,84 @@ response:
 
 ```
 
-#### 其他与链交互接口列表：
+#### The list of chain interaction interfaces
 
 | No   |                    Main   Function                     |     Description      |
 | ---- | :----------------------------------------------------: | :------------------: |
-| 1    |       ontSdk.getConnect().getGenerateBlockTime()       |   查询VBFT出块时间   |
-| 2    |           ontSdk.getConnect().getNodeCount()           |     查询节点数量     |
-| 3    |            ontSdk.getConnect().getBlock(15)            |        查询块        |
-| 4    |          ontSdk.getConnect().getBlockJson(15)          |        查询块        |
-| 5    |       ontSdk.getConnect().getBlockJson("txhash")       |        查询块        |
-| 6    |         ontSdk.getConnect().getBlock("txhash")         |        查询块        |
-| 7    |          ontSdk.getConnect().getBlockHeight()          |     查询当前块高     |
-| 8    |      ontSdk.getConnect().getTransaction("txhash")      |       查询交易       |
-| 9    | ontSdk.getConnect().getStorage("contractaddress", key) |   查询智能合约存储   |
-| 10   |       ontSdk.getConnect().getBalance("address")        |       查询余额       |
-| 11   | ontSdk.getConnect().getContractJson("contractaddress") |     查询智能合约     |
-| 12   |       ontSdk.getConnect().getSmartCodeEvent(59)        |   查询智能合约事件   |
-| 13   |    ontSdk.getConnect().getSmartCodeEvent("txhash")     |   查询智能合约事件   |
-| 14   |  ontSdk.getConnect().getBlockHeightByTxHash("txhash")  |   查询交易所在高度   |
-| 15   |      ontSdk.getConnect().getMerkleProof("txhash")      |    获取merkle证明    |
-| 16   | ontSdk.getConnect().sendRawTransaction("txhexString")  |       发送交易       |
-| 17   |  ontSdk.getConnect().sendRawTransaction(Transaction)   |       发送交易       |
-| 18   |    ontSdk.getConnect().sendRawTransactionPreExec()     |    发送预执行交易    |
-| 19   |  ontSdk.getConnect().getAllowance("ont","from","to")   |    查询允许使用值    |
-| 20   |        ontSdk.getConnect().getMemPoolTxCount()         | 查询交易池中交易总量 |
-| 21   |        ontSdk.getConnect().getMemPoolTxState()         | 查询交易池中交易状态 |
+| 1    |       ontSdk.getConnect().getGenerateBlockTime()       |   Query VBFT block-out time   |
+| 2    |           ontSdk.getConnect().getNodeCount()           |     Query the number of nodes     |
+| 3    |            ontSdk.getConnect().getBlock(15)            |        Query block info        |
+| 4    |          ontSdk.getConnect().getBlockJson(15)          |        Query block info        |
+| 5    |       ontSdk.getConnect().getBlockJson("txhash")       |        Query block info        |
+| 6    |         ontSdk.getConnect().getBlock("txhash")         |        Query block info        |
+| 7    |          ontSdk.getConnect().getBlockHeight()          |     Query current block height     |
+| 8    |      ontSdk.getConnect().getTransaction("txhash")      |       Query transaction       |
+| 9    | ontSdk.getConnect().getStorage("contractaddress", key) |   Query smart contract storage   |
+| 10   |       ontSdk.getConnect().getBalance("address")        |       Query balance       |
+| 11   | ontSdk.getConnect().getContractJson("contractaddress") |     Query smart contract     |
+| 12   |       ontSdk.getConnect().getSmartCodeEvent(59)        |   Query the event in the smart contract   |
+| 13   |    ontSdk.getConnect().getSmartCodeEvent("txhash")     |   Query the event in the smart contract   |
+| 14   |  ontSdk.getConnect().getBlockHeightByTxHash("txhash")  |   Query the block height by transaction hash   |
+| 15   |      ontSdk.getConnect().getMerkleProof("txhash")      |    Get merkle proof    |
+| 16   | ontSdk.getConnect().sendRawTransaction("txhexString")  |       Send transaction       |
+| 17   |  ontSdk.getConnect().sendRawTransaction(Transaction)   |       Send transaction       |
+| 18   |    ontSdk.getConnect().sendRawTransactionPreExec()     |    Send a pre-execution transaction    |
+| 19   |  ontSdk.getConnect().getAllowance("ont","from","to")   |    Query Allowed Values    |
+| 20   |        ontSdk.getConnect().getMemPoolTxCount()         | Query total transaction volumn in the transaction pool  |
+| 21   |        ontSdk.getConnect().getMemPoolTxState()         | Query transaction status in the transaction pool |
 
-#### 3. ONT转账
+#### 3. ONT transfer
 
-##### 构造转账交易并发送
+##### Construct transfer transaction and send
 
 ```
-转出方与收款方地址：
+// Transferee and payee address
 Address sender = acct0.getAddressU160();
 Address recvAddr = acct1;
-//多签地址生成
+
+// Multiple address generation
 //Address recvAddr = Address.addressFromMultiPubKeys(2, acct1.serializePublicKey(), acct2.serializePublicKey());
 
-构造转账交易：
+// Construct a transfer transaction
 long amount = 1000;
 Transaction tx = ontSdk.nativevm().ont().makeTransfer(sender.toBase58(),recvAddr.toBase58(), amount,sender.toBase58(),30000,0);
 
-
-对交易做签名：
+// Sign a transaction
 ontSdk.signTx(tx, new com.github.ontio.account.Account[][]{{acct0}});
-//多签地址的签名方法：
+//Signature scheme of multiple address
 ontSdk.signTx(tx, new com.github.ontio.account.Account[][]{{acct1, acct2}});
-//如果转出方与网络费付款人不是同一个地址，需要添加网络费付款人的签名
+//If the addresses of the transferee and the payer who pay the network fee are different, the payer’s signature needs to be added.
 
-
-发送交易：
+// Send a transaction
 ontSdk.getConnect().sendRawTransaction(tx.toHexString());
 
 
 ```
 
-
-
-| 方法名       | 参数                                                         | 参数描述                                                     |
+| Method Name       | Parameter                                                         | Parameter Description                                                      |
 | :----------- | :----------------------------------------------------------- | :----------------------------------------------------------- |
-| makeTransfer | String sender，String recvAddr,long amount,String payer,long gaslimit,long gasprice | 发送方地址，接收方地址，金额，网络费付款人地址，gaslimit，gasprice |
-| makeTransfer | State\[\] states,String payer,long gaslimit,long gasprice    | 一笔交易包含多个转账。                                       |
+| makeTransfer | String sender，String recvAddr,long amount,String payer,long gaslimit,long gasprice | sender address, receiver address, amount, network fee payer address, gaslimit, gasprice |
+| makeTransfer | State\[\] states,String payer,long gaslimit,long gasprice    | A transaction contains multiple transfers |
 
-##### 多次签名
+##### Multiple signatures 
 
-如果转出方与网络费付款人不是同一个地址，需要添加网络费付款人的签名
+If the addresses of the transferee and the payer who pay the network fee are different, the payer’s signature needs to be added.
 
 ```
-1.添加单签签名
+// 1.Add single signature 
 ontSdk.addSign(tx,acct0);
 
-2.添加多签签名
+// 2.Add multiple signatures 
 ontSdk.addMultiSign(tx,2,new com.github.ontio.account.Account[]{acct0,acct1});
 
 ```
 
 
+##### One to multiple or multiple to multiple
 
-##### 一转多或多转多
-
-1. 构造多个state的交易
-2. 签名
-3. 一笔交易上限为1024笔转账
+1. Construct a transaction with multiple states
+2. Signature
+3. A transaction includes 1024 transfers at most
 
 ```
 Address sender1 = acct0.getAddressU160();
@@ -775,38 +755,37 @@ State state = new State(sender1, recvAddr, amount);
 State state2 = new State(sender2, recvAddr, amount2);
 Transaction tx = ontSdk.nativevm().ont().makeTransfer(new State[]{state1,state2},sender1.toBase58(),30000,0);
 
-//第一个转出方是单签地址，第二个转出方是多签地址：
+//The first transferee is a single-signature address, and the second transferee is a multiple-signature address
 ontSdk.signTx(tx, new com.github.ontio.account.Account[][]{{acct0}});
 ontSdk.addMultiSign(tx,2,new com.github.ontio.account.Account[]{acct1, acct2});
 
 ```
 
-#### 使用签名机签名
+#### Use signature server to sign
 
-- **构造交易并签名**
+- **Construct transaction and sign**
 
-1. 构造交易，序列化交易，发送交易给签名机
-2. 签名机接收到交易，反序列化，检查交易，添加签名
-3. 发送交易
+1. Construct a transaction, serialize a transaction, send a transaction to the signature server
+2. The signature server receives the transaction, deserializes, checks the transaction, and adds the signature
+3. Send transaction
 
 ```
-序列化交易发送给签名机：
+//Send serialized transaction to signature server
 Transaction tx = ontSdk.nativevm().ont().makeTransfer(sender.toBase58(),recvAddr.toBase58(), amount,sender.toBase58(),30000,0);
 String txHex = tx.toHexString();
 
-接收方反序列化交易并签名：
-
+//The receiver deserializes the transaction and signs it
 Transaction txRx = Transaction.deserializeFrom(Helper.hexToBytes(txHex));
-//查看交易中转账内容
+//View transfer content in the transaction
 System.out.println(Transfers.deserializeFrom(Contract.deserializeFrom(txRx.code).args).json());
 
-签名：
+//Sign
 ontSdk.addSign(txRx,acct0);
 ```
 
-- **对数据做签名**
+- **Sign data**
 
-[例子](https://github.com/ontio/ontology-java-sdk/blob/master/src/main/java/demo/SignatureDemo.java) 
+[Example](https://github.com/ontio/ontology-java-sdk/blob/master/src/main/java/demo/SignatureDemo.java) 
 
 ```
 com.github.ontio.account.Account acct = new com.github.ontio.account.Account(ontSdk.defaultSignScheme);
@@ -820,30 +799,30 @@ System.out.println(ontSdk.verifySignature(acct.serializePublicKey(), data, signa
 
 
 
-#### 4. ONG转账
+#### 4. ONG transfer
 
-##### ONG转账
+##### ONG transfer
 
-接口与ONT类似：
+The interface is similar to ONT:
 
 ```
 ontSdk.nativevm().ong().makeTransfer...
 ```
 
-##### 提取ONG
+##### Withdraw ONG
 
-1. 查询是否有ONG可以提取
-2. 创建账号
-3. 构造交易
-4. 签名
-5. 发送提取ONG交易
+1. Check the balance of ONG
+2. Create account
+3. Construct transaction
+4. Signature
+5. Send transaction that withdraw ONG
 
 ```
-查询未提取ong:
+//Query non-withdrawal ONG
 String claimer = acct0.getAddressU160().toBase58();
 sdk.nativevm().ong().unclaimOng(claimer);
 
-//claim ong，提取ong
+//Claim ong，withdraw ONG
 com.github.ontio.account.Account acct0 = new com.github.ontio.account.Account(Helper.hexToBytes(privatekey0), ontSdk.signatureScheme);
 
 Transaction tx = sdk.nativevm().ong().makeClaimOng(claimer,claimer,10,claimer,30000,0);
@@ -852,30 +831,29 @@ sdk.signTx(tx, new com.github.ontio.account.Account[][]{{acct0}});
 ontSdk.getConnect().sendRawTransaction(tx.toHexString());
 ```
 
-| 方法名       | 参数                                                         | 参数描述                                                     |
+| Method Name       | Parameter                                                         | Parameter Description                                                      |
 | :----------- | :----------------------------------------------------------- | :----------------------------------------------------------- |
-| makeClaimOng | String claimer,String to,long amount,String payer,long gaslimit,long gasprice | claim提取者，提给谁，金额，网络付费人地址，gaslimit，gasprice |
+| makeClaimOng | String claimer,String to,long amount,String payer,long gaslimit,long gasprice | claimer，who to send，amount, network payer address，gaslimit，gasprice |
 
 
+## 5. Distribute ONG to Users
 
-## 5. 给用户分发ONG
+The exchange can choose whether to distribute the ONG to users. The ONG is used to pay for the Ontology blockchain bookkeeping fees, network fees, and other service fees.
 
-交易所可以选择是否给用户分发ONG， ONG用于支付Ontology区块链的记账费用和网络等附加服务费。
+### What is ONG
 
-### 什么是ONG
+The total number of ONG is 1 billion with a precision of 9. When the ONT transfer transaction occurs, the unlocked ONG will be authorized by the ONT contract to the transfer sender and receiver. The ONG quantity that the ONT holder can obtain is the percentage of the total amount of ONT owned by the ONT holder. If the transfer transaction has not been triggered, the ONG authorized to the ONT holder will be accumulated and will be issued at the time of the next transfer transaction. This part of the ONG needs to be manually withdrew into wallet address.
 
-ONG对应ONT总量为10亿，精度为9。当ONT转账交易发生时，解绑的ONG将会由ONT合约授权给转账发起人和接收人，而ONT持有者所能获得的ONG的数量是由ONT持有者的占ONT总量的百分比决定，若转账交易一直不被触发，则授权给ONT持有者的ONG将会被累加，在下一次转账交易发生时，一次性发放，这部分的ONG需要手动提取到自己的钱包地址中。
+### Calculate the amount of ONG that can withdraw
 
-### 计算可提取的ONG总量
+The number of unlocked ONGs is determined by the time interval. The unlock rule is as follows: Unlocking ONG once every second. The number of unlocked ONG is not constant and the unlocked number is determined by ontology unlocked distribution curve. Ontology unlocked distribution curve interval is [5, 4, 3, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]. Approximately every 31536000 blocks, the unlocked value of ONG will be changed. After about 18 years, all ONGs will be unlocked.
 
-ONG解绑的数量由时间区间决定，解绑规则如下：每一秒钟解绑一次ONG，解绑的ONG数量并不是一直恒定的不变，而是按照本体解绑分布曲线呈现递减式解绑，本体解绑分布曲线区间为[5, 4, 3, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]，大约经过每31536000个时间区间块后，按照本体解绑分布曲线，ONG的解绑值将会发生一次变更，大约经过约18年后，全部ONG将会解绑完毕。
-
-**ONG解绑列表**
+**ONG locked list**
 ![ong](https://s15.postimg.cc/bwnan7anv/image.png)
 
-### 给用户分发ONG
+### Distribute ONG to users
 
-通过CLI查看未解绑ONG余额：```./ontology asset unboundong <address|index|label>```
+View locked ONG Balances via the CLI：```./ontology asset unboundong <address|index|label>```
 
 ```
 $ ./ontology asset unboundong 1
@@ -885,16 +863,16 @@ Unclaim Ong:
 
 ```
 
-通过CLI提取解绑的ONG：```./ontology asset withdrawong <address|index|label>```
+Withdraw unlocked ONG via CLI：```./ontology asset withdrawong <address|index|label>```
 
 --wallet, -w  
-wallet指定提取账户的钱包路径，默认值为:"./wallet.dat"
+Wallet specifies the wallet path of withdrawal account. The default value is: "./wallet.dat".
 
 --gasprice  
-gasprice参数指定转账交易的gas price。交易的gas price不能小于接收节点交易池设置的最低gas price，否则交易会被拒绝。默认值为0。当交易池中有交易在排队等待打包进区块时，交易池会按照gas price有高到低排序，gas price高的交易会被优先处理。
+The gasprice parameter specifies the gas price of the transfer transaction. The gas price of the transaction cannot be less than the lowest gas price set by node's transaction pool, otherwise the transaction will be rejected. The default value is 0. When there are transactions that are queued for packing into the block in the transaction pool, the transaction pool will deal with transactions according to the gas price and transactions with high gas prices will be prioritized. 
 
 --gaslimit  
-gaslimit参数指定转账交易的gas limit。交易的gas limit不能小于接收节点交易池设置的最低gas limit，否则交易会被拒绝。gasprice * gaslimit 为账户实际支持的ONG 费用。 默认值为30000。
+The gaslimit parameter specifies the gas limit of the transfer transaction. The gas limit of the transaction cannot be less than the minimum gas limit set by the node's transaction pool, otherwise the transaction will be rejected. Gasprice * gaslimit is actual ONG costs. The default value is 30000.
 
 ```
 $ ./ontology asset withdrawong 1
@@ -909,19 +887,17 @@ Tip:
 
 ```
 
-同”用户充值“，可根据```./ontology info status c696033f1589a88c7b849dbd2ad0c13a9ca695c3220e4f846f9b1096d0972b80```
+Same as user deposit，you can use ```./ontology info status c696033f1589a88c7b849dbd2ad0c13a9ca695c3220e4f846f9b1096d0972b80``` to query the result of the ONG withdrawal.
 
-查询提取ONG交易的结果。
+Example:
 
-例如：
-
-假设交易所的所有地址都在一个钱包里，下图显示了交易所向某用户 A 分发 GAS 的流程和计算公式：
+Assuming that all addresses of the exchange are in one wallet, the following figure shows the process and calculation formula about how an exchange distributes ONG to a user A:
 
 ![ong](./images/ong1.png)
 
-### 用户提取ONG
+### Users withdraw ONG
 
-用户提取ONG的流程和提取ONT的流程一致，只需指定asset 参数为ong即可：
+The process of withdrawing the ONG is the same as the process of withdrawing the ONT, just specify the asset parameter as ong:
 
 ```
 $ ./ontology asset transfer --asset ong --from TA5zt4PrSzjWA7DaVHVw2nhxH5ZY9uQiGq --to TA8MoGmzS4T6g3T1CMGEVFiNGkZnn7ixw9 --amount 100
@@ -937,8 +913,8 @@ Tip:
 
 ```
 
-使用Java SDK 提取ONG，请参照[Java SDK:ONG转账](https://github.com/ontio/ontology-java-sdk/blob/master/docs/cn/sdk_get_start.md#24-ong%E8%BD%AC%E8%B4%A6)
+Use Java SDK to withdraw ONG，please refer to[Java SDK:ONG transfer](https://github.com/ontio/ontology-java-sdk/blob/master/docs/cn/sdk_get_start.md#24-ong%E8%BD%AC%E8%B4%A6)
 
-## 6. 签名服务
+## 6. Signature service
 
-[Ontology 签名服务器使用说明](./Ontology+签名服务器使用说明.md)
+[Ontology Signature Server Tutorials](./Ontology+Signature-Server-Tutorials.md)
