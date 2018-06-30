@@ -1,12 +1,12 @@
-<h1 align="center">How to call a smart contract</h1>
+<h1 align="center">Smart Contract Calling</h1>
 
-### 1. Construct a transaction
+## 1. Construct a transaction
 
 When a smart contract is deployed on the blockchain, we can construct a transaction to call a contract's method.
 
 Before constructing a transaction, we need to know the contract's abi file and the hash address of the contract.
 
-#### What is an abi file
+### What is an abi file
 
 After a smart contract is written, the developer will use the corresponding compiler to compile the contract. After the compilation, the abi file and avm file will be generated. The avm file is the bytecode of the contract. When the contract is deployed on the blockchain, the contract bytecode is stored in the storage area allocated to the contract. The abi file is a JSON file that describes the specific structure of a contract, including the entry function, the interface functions, the parameter list of functions, the return value and events. From contract's abi file, we can learn about the detailed features of the contract.
 
@@ -14,11 +14,11 @@ Using SmartX as an example, we have a template contract "Arith" that can do simp
 
 ![](http://wx2.sinaimg.cn/mw690/0060lm7Tly1fsqydcu9nzj30ep09udg9.jpg)
 
-#### What is a contract hash?
+### What is a contract hash?
 
 A contract hash is a value obtained by performing some hash operations on the avm content of the contract. This unique value is used to distinguish different contracts. An abi file also contains contract hash.
 
-#### Construct a transaction by SDK
+### Construct a transaction by SDK
 
 We can easily construct a transaction through the SDK. Using TS SDK as an example. The contract we want to call is the template contract "Arith", and the method to be called is "Add" function of the contract.
 
@@ -56,7 +56,7 @@ signTransaction(tx, privateKey);
 
 Now the signed transaction can be sent to the blockchain for execution.
 
-### 2. Send a transaction
+## 2. Send a transaction
 
 We have multiple ways to send transaction:
 
@@ -84,7 +84,7 @@ console.log(res);
 })
 ````
 
-### 3. Get the transaction result
+## 3. Get the transaction result
 
 In the previous step, we sent the transaction to the blockchain via the restful interface. The results returned are as follows:
 
