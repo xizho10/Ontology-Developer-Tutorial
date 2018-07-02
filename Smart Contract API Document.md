@@ -48,6 +48,7 @@ Contract API：
 | Contract.StorageContext                  | StorageContext | Get the contract's storage context  |
 
 Storage API：
+
 | API                                      | Return Value            | Description                               |
 | ---------------------------------------- | -------------- | -------------------------------- |
 | Storage.CurrentContext                   | StorageContext | Get the current storage context                       |
