@@ -12,27 +12,27 @@ SmartX是一个可用于编译，部署和调用智能合约的一站式IDE。�
 
 首先，您需要创建ONT ID管理您的智能合约项目。请在主页点击“注册”按钮注册您的账户，如下图所示。
 
-![注册](http://wx1.sinaimg.cn/mw690/0060lm7Tly1fstiyin8yaj319e0os78v.jpg)
+![注册](https://upload-images.jianshu.io/upload_images/150344-6beeb3324ef05ac9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 在输入两次密码之后（密码长度至少大于6），点击“生成ONT ID”注册账号。您需要点击“下载”按钮下载ONT ID文件并备份私钥。ONT ID文件存储了您加密后的ONT ID和私钥，私钥是您唯一恢复ONT ID账户的凭证，请妥善保管。
 
-![ONT ID 文件](http://wx2.sinaimg.cn/mw690/0060lm7Tly1fstj2bsv5xj30sh0icjtk.jpg)
+![ONT ID 文件](https://upload-images.jianshu.io/upload_images/150344-0968e53b4bd0fa14.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-![](http://wx4.sinaimg.cn/mw690/0060lm7Tly1fstj32gzk8j30o80iimz7.jpg)
+![](https://upload-images.jianshu.io/upload_images/150344-5b2f2519b025cebe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 如果您已经拥有了ONT ID，您可以点击“恢复 ONT ID”按钮来找回您的ONT ID. 在输入私钥和两遍密码之后，点击“恢复 ONT ID”按钮找回ONT ID。
 
-![恢复](http://wx2.sinaimg.cn/mw690/0060lm7Tly1fstj5gqw3xj30np0jdmyy.jpg)
+![恢复](https://upload-images.jianshu.io/upload_images/150344-4bf4133ccb19f075.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ## 登录
 
 在注册之后，您已经拥有了ONT ID文件，您仅需要选择这个文件并输入密码来登录您的账户，如下图所示。
 
-![登录](http://wx1.sinaimg.cn/mw690/0060lm7Tly1fstj6i5no6j30o00lcac9.jpg)
+![登录](https://upload-images.jianshu.io/upload_images/150344-e3848962a4dfe0d1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 在登录之后，您将进入项目列表页面。您可以选择已存在的项目或者选择创新新项目。
 
-![创建项目](http://upload-images.jianshu.io/upload_images/150344-a3d3385d889e1dd0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![创建项目](https://upload-images.jianshu.io/upload_images/150344-17ec830db0f4d948.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ## 第一步 - 编写&编译智能合约 
 
@@ -43,11 +43,11 @@ SmartX是一个可用于编译，部署和调用智能合约的一站式IDE。�
 
 首先你需要创建一个项目并选择你喜欢的语言，开始编写智能合约。
 
-![选择语言](http://wx2.sinaimg.cn/mw690/0060lm7Tly1fstjbsyc5uj30jd0dcaai.jpg)
+![选择语言](https://upload-images.jianshu.io/upload_images/150344-de1bad190b1c6c66.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 然后进入项目编辑页面。中间主要部分是合约的编辑器。右侧是操作面板。中间下部打印操作的输出结果。
 
-![编译](https://s1.ax1x.com/2018/04/04/CpIdpR.png)
+![编译](https://upload-images.jianshu.io/upload_images/150344-d100aa119363ec2c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ### 编写智能合约
 
@@ -72,14 +72,14 @@ SmartX是一个可用于编译，部署和调用智能合约的一站式IDE。�
 
 [>> TS SDK](https://ontio.github.io/documentation/ontology_ts_sdk_smartcontract_en.html)
 
-![部署智能合约](https://s1.ax1x.com/2018/04/04/CpIcAe.png)
+![部署智能合约](https://upload-images.jianshu.io/upload_images/150344-d0160bc4a38a804d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
 ## 第三步 - 调用智能合约
 
 最后，你可以运行合约中的方法。你可以选择想要运行的方法，输入正确的参数值，点击运行按钮，调用智能合约。调用的结果将会打印在输出框里。
 
-![调用智能合约](https://s1.ax1x.com/2018/04/04/CpoCEF.png)
+![调用智能合约](https://upload-images.jianshu.io/upload_images/150344-5229fe6d34a67372.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 除了Smartx，你还可以使用本体的SDK来调用智能合约。更多信息请查阅相关文档。
 
