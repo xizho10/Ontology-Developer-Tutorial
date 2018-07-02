@@ -47,6 +47,7 @@
 | Contract.StorageContext                  | StorageContext | 获得合约的存储上下文  |
 
 存储类 API：
+
 | API                                      | 返回值            | 说明                               |
 | ---------------------------------------- | -------------- | -------------------------------- |
 | Storage.CurrentContext                   | StorageContext | 获取当前存储区上下文                       |
