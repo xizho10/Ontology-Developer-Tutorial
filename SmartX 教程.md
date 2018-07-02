@@ -16,7 +16,7 @@ SmartX是一个可用于编译，部署和调用智能合约的一站式IDE。�
 
 在输入两次密码之后（密码长度至少大于6），点击“生成ONT ID”注册账号。您需要点击“下载”按钮下载ONT ID文件并备份私钥。ONT ID文件存储了您加密后的ONT ID和私钥，私钥是您唯一恢复ONT ID账户的凭证，请妥善保管。
 
-![ONT ID 文件](https://upload-images.jianshu.io/upload_images/150344-0968e53b4bd0fa14.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![ONT ID 文件](https://upload-images.jianshu.io/upload_images/150344-a312b6edd22caf32.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ![](https://upload-images.jianshu.io/upload_images/150344-5b2f2519b025cebe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
