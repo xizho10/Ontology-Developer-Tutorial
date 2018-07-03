@@ -12,7 +12,8 @@ Ontology Smart Contract possesses dynamic features, including high scalability, 
 
 Ontology smart contract have certainty, high-performance, and expandable features. It includes two modules: Interactive Service and Virtual Machine. Interactive Service provides interaction between virtual machine and blockchain ledger. Virtual Machine provides smart contract execution environment. Interactive Service includes native service and NeoVM service. Native service provides special smart contract implementation in the blockchain, which can be quickly and conveniently used. NeoVM service provides the API of NeoVM to communicate externally, which can enhance the invoke function of the smart contract. 
 
-![ontology smart contract architecture.png](https://upload-images.jianshu.io/upload_images/150344-40fc17d3d0ba03ed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![ontology smart contract type.png](https://upload-images.jianshu.io/upload_images/150344-9de99ae016dd23ef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 
 
 ## Contract Type
