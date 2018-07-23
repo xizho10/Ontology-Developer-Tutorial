@@ -2,8 +2,6 @@
 
 <p align="center" class="version">Version 1.0.0</p>
 
-English / [中文]()
-
 - [Introduction](#introduction)
 - [RPC interface function list](#rpc-interface-function-list)
 - [Wallet function list](#wallet-function-list)
