@@ -1,29 +1,15 @@
 <h1 align="center">Ontology SDK Function List</h1>
 
-<p align="center" class="version">Version 1.0.0 </p>
+<p align="center" class="version">Version 1.0.0</p>
 
 English / [中文]()
 
 ## Introduction
-Ontology SDK function consists of four parts, RPC interface, wallet, asset, and identity. For RPC interface, it is responsible to interact with the Ontology blockchain, including querying and sending transactions. For wallet, it manages wallet file and store the encrypted private key of the asset account and identity. The function of asset can implement transfer ONT/ONG, check account balance, withdraw ONT/ONG and so on. The function of identity can send request to register ONT ID and get DDO object.
-
-### init ：
-
-包括打开钱包文件和设置与链交互方式
- 
-
- |     | Main   Function | Description |           
- |:-----|:--------|:-----------------------|
-|   1 | sdk.setRpc(rpcUrl)                            |   set rpc    |        
-|   2 | sdk.setRestful(restUrl)                       |   set restful|
-|   3 | sdk.setWesocket(wsUrl, lock)                  |   set websocket|
-|   4 | wm.setDefaultConnect(wm.getWebSocket());     |    set desualt|
-|   5 | wm.openWalletFile("OntAssetDemo.json");        |   open wallet|
+Ontology SDK function consists of four parts, RPC interface, wallet, asset, and identity. For RPC interface, it is responsible to interact with the Ontology blockchain, including querying and sending transactions. For wallet, it manages wallet file and store the encrypted private key of the asset account and identity. The function of asset can implement transfer ONT/ONG, check account balance, withdraw ONT/ONG and so on. The function of identity can send request to register ONT ID and get DDO object. In addition to these four parts, SDK also needs to support constructing, deploying, and invoking a smart contract. 
 
 
-### communication with block chain interface：
 
-* 交互接口列表：
+## RPC interface function list
 
 
  |     | Main   Function | Description |           
@@ -52,11 +38,11 @@ Ontology SDK function consists of four parts, RPC interface, wallet, asset, and 
  |   22 | syncSendRawTransaction("data")       |  sync Send RawTransaction |
 
 
-### wallet manager：
+## Wallet function list
 
-包括数字资产和数字身份管理
+The wallet function includes three parts, digit account, digit identity, and mnemonics and kestore interface.
  
-* 数字资产账户：
+### digit account:
 
  |     | Main   Function | Description |           
  |:-----|:--------|:-----------------------|
@@ -71,7 +57,7 @@ Ontology SDK function consists of four parts, RPC interface, wallet, asset, and 
 |   9 | Account getDefaultAccount()                                                |   get default account|
 
 
-* 数字身份：
+### digit identity:
 
  |     | Main   Function |       
  |:-----|:--------|
@@ -87,7 +73,7 @@ Ontology SDK function consists of four parts, RPC interface, wallet, asset, and 
 |  10 | Identity addOntIdController(String ontid, String key, String id)           |    
    
 
-助记词和keystore接口：
+### mnemonics and kestore interface:
 
  |     | Main   Function |           
  |:-----|:--------|
@@ -101,15 +87,13 @@ Ontology SDK function consists of four parts, RPC interface, wallet, asset, and 
 |   8 | decryptMnemonicCodesStr(String encryptedMnemonicCodesStr, String password,String address)     |    
    
 
-### digit asset：
+## Asset function list
 
-1.native digit asset
+The asset includes native digit asset and Nep-5 smart constract digit asset.
 
-2.Nep-5 smartconstract digit asset
+### Native digit asset：
 
-* native digit asset：
-ont:
-
+* ONT:
 
  |     | Main   Function | Description |           
  |:-----|:--------|:-----------------------|
@@ -124,7 +108,7 @@ ont:
  |   9 | long queryTotalSupply()                                                                     |  query TotalSupply|
       
       
-ong:
+* ONG:
 
 
  |     | Main   Function | Description |           
@@ -143,7 +127,7 @@ ong:
       
       
 
-* Nep-5 digit asset:
+### Nep-5 digit asset:
 
  |     | Main   Function | Description |           
  |:-----|:--------|:-----------------------|
@@ -159,15 +143,9 @@ ong:
 |   10 | String querySymbol()                                                                          |  query Symbol|
 
 
-### digit identity：
+## Identity function list 
 
-1.Register, AddPubKey,AddAttribute,AddRecovery
-
-2.claim create and verify
-
-3.claim record
-
-* ontid：
+### ONT ID
 
  |     | Main   Function | Description |           
  |:-----|:--------|:-----------------------|
@@ -189,7 +167,7 @@ ong:
 |   16 | String sendGetDDO(String ontid)  |  get DDO|
    
 
-* make tansaction：
+### Make a transaction
 
  |     | Main   Function |           
  |:-----|:--------|
@@ -204,7 +182,7 @@ ong:
 |   9 | Transaction makeAddRecovery(String ontid, String password,byte[] salt, String recoveryAddr,String payer,long gaslimit,long gasprice)                     |
 
   
-* Claim：
+### Claim：
   
  |     | Main   Function |           
  |:-----|:--------|
@@ -212,21 +190,20 @@ ong:
  |  2 | boolean verifyMerkleProof(String claim)                                                                                       |                 
  |  3 | String createOntIdClaim(String signerOntid, String pwd,byte[] salt, String context, Map claimMap, Map metaData,Map clmRevMap,long expire) |
  |  4 | boolean verifyOntIdClaim(String claim)                                                                                        |   
-  
-
  
-* Claim record：
+ 
+### Claim record：
   
  |     | Main   Function |          
  |:-----|:--------|
   | 1 | String sendCommit(String issuerOntid,String pwd,byte[] salt,String subjectOntid,String claimId,Account payerAcct,long gaslimit,long gasprice)  |
 |   2 | String sendRevoke(String issuerOntid,String password,byte[] salt,String claimId,Account payerAcct,long gaslimit,long gasprice)                 |
 |   3 | String sendGetStatus(String claimId) |   
+
+## Smart Contract
   
  
- ### neo smart contract deploy and invoke
- 
- deploy and invoke
+### NEO smart contract deployment and invocation
   
  |     | Main   Function | Description |          
  |:-----|:--------|:-----------------------|
@@ -234,12 +211,11 @@ ong:
  |   2 | InvokeCode makeInvokeCodeTransaction(String codeAddr,String method,byte[] params, byte vmtype, String payer,long gaslimit,long gasprice)                                                           |   invoke|
   
 
-
- ### Native smart contract invoke
+ ### Native smart contract invocation
+ 
+ 
 
  #### auth manager contract
-
-* auth manager：
 
  |     | Main   Function |       
  |:-----|:--------|
