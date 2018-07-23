@@ -232,11 +232,9 @@ The asset includes native digit asset and Nep-5 smart constract digit asset.
  |   2 | InvokeCode makeInvokeCodeTransaction(String codeAddr,String method,byte[] params, byte vmtype, String payer,long gaslimit,long gasprice)                                                           |   invoke|
   
 
- ### Native smart contract invocation
- 
- 
+ ### Native smart contract 
 
- ### Auth manager contract
+ #### Auth manager contract
 
  |     | Main   Function |       
  |:-----|:--------|
@@ -247,7 +245,7 @@ The asset includes native digit asset and Nep-5 smart constract digit asset.
 |     5 | String withdraw(String initiatorOntid,String password,byte[] salt,String contractAddr,String delegate, String role,int key,Account payerAcct, long gaslimit,long gasprice)          |
 
 
- ### Make transaction
+ ##### Make transaction
 
  |     | Main   Function |      
  |:-----|:--------|
@@ -258,7 +256,7 @@ The asset includes native digit asset and Nep-5 smart constract digit asset.
 |     5 | Transaction makeWithDraw(String ontid,String contractAddr,String delegate, String role,int key,String payer,long gaslimit,long gasprice)                  |   
 
  
-  ### Governance contract
+ #### Governance contract
   
  |     | Main   Function |         
  |:-----|:--------|
