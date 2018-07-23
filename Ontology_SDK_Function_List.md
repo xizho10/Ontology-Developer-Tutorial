@@ -73,7 +73,7 @@ The wallet function includes three parts, digit account, digit identity, and mne
 |  10 | Identity addOntIdController(String ontid, String key, String id)           |    
    
 
-### mnemonics and kestore interface:
+### Mnemonics and kestore interface:
 
  |     | Main   Function |           
  |:-----|:--------|
@@ -215,7 +215,7 @@ The asset includes native digit asset and Nep-5 smart constract digit asset.
  
  
 
- #### auth manager contract
+ #### Auth manager contract
 
  |     | Main   Function |       
  |:-----|:--------|
@@ -226,7 +226,7 @@ The asset includes native digit asset and Nep-5 smart constract digit asset.
 |     5 | String withdraw(String initiatorOntid,String password,byte[] salt,String contractAddr,String delegate, String role,int key,Account payerAcct, long gaslimit,long gasprice)          |
 
 
- * make transaction：
+ * Make transaction：
 
  |     | Main   Function |      
  |:-----|:--------|
