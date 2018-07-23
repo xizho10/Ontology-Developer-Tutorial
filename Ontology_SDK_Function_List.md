@@ -6,7 +6,24 @@ English / [中文]()
 
 - [Introduction](#introduction)
 - [RPC interface function list](#rpc-interface-function-list)
-
+- [Wallet function list](#wallet-function-list)
+ - [Digit account](#digit-account)
+ - [Digit identity](#digit-identity)
+ - [Mnemonics and kestore interface](#mnemonics-and-kestore-interface)
+- [Asset function list](#asset-function-list)
+ - [Native digit asset](#native-digit-asset)
+ - [Nep-5 digit asset](#Nep-5-digit-asset)
+- [Identity function list](#identity-function-list)
+ - [ONT ID](#ont-id)
+ - [Make a transaction](#make-a-transaction)
+ - [Claim](#claim)
+ - [Claim record](#claim-record)
+- [Smart Contract](#smart-contract)
+ - [NEO smart contract deployment and invocation](#neo-smart-contract-deployment-and-invocation)
+ - [Native smart contract invocation](#native-smart-contract-invocation)
+ - [Auth manager contract](#auth-manager-contract)
+ - [Make transaction](#make-transaction)
+ - [Governance contract](#governance-contract)
 
 ## Introduction
 Ontology SDK function consists of four parts, RPC interface, wallet, asset, and identity. For RPC interface, it is responsible to interact with the Ontology blockchain, including querying and sending transactions. For wallet, it manages wallet file and store the encrypted private key of the asset account and identity. The function of asset can implement transfer ONT/ONG, check account balance, withdraw ONT/ONG and so on. The function of identity can send request to register ONT ID and get DDO object. In addition to these four parts, SDK also needs to support constructing, deploying, and invoking a smart contract. 
@@ -46,7 +63,7 @@ Ontology SDK function consists of four parts, RPC interface, wallet, asset, and 
 
 The wallet function includes three parts, digit account, digit identity, and mnemonics and kestore interface.
  
-### digit account:
+### Digit account
 
  |     | Main   Function | Description |           
  |:-----|:--------|:-----------------------|
@@ -61,7 +78,7 @@ The wallet function includes three parts, digit account, digit identity, and mne
 |   9 | Account getDefaultAccount()                                                |   get default account|
 
 
-### digit identity:
+### Digit identity
 
  |     | Main   Function |       
  |:-----|:--------|
@@ -77,7 +94,7 @@ The wallet function includes three parts, digit account, digit identity, and mne
 |  10 | Identity addOntIdController(String ontid, String key, String id)           |    
    
 
-### Mnemonics and kestore interface:
+### Mnemonics and kestore interface
 
  |     | Main   Function |           
  |:-----|:--------|
@@ -95,7 +112,7 @@ The wallet function includes three parts, digit account, digit identity, and mne
 
 The asset includes native digit asset and Nep-5 smart constract digit asset.
 
-### Native digit asset：
+### Native digit asset
 
 * ONT:
 
@@ -131,7 +148,7 @@ The asset includes native digit asset and Nep-5 smart constract digit asset.
       
       
 
-### Nep-5 digit asset:
+### Nep-5 digit asset
 
  |     | Main   Function | Description |           
  |:-----|:--------|:-----------------------|
@@ -186,7 +203,7 @@ The asset includes native digit asset and Nep-5 smart constract digit asset.
 |   9 | Transaction makeAddRecovery(String ontid, String password,byte[] salt, String recoveryAddr,String payer,long gaslimit,long gasprice)                     |
 
   
-### Claim：
+### Claim
   
  |     | Main   Function |           
  |:-----|:--------|
@@ -196,7 +213,7 @@ The asset includes native digit asset and Nep-5 smart constract digit asset.
  |  4 | boolean verifyOntIdClaim(String claim)                                                                                        |   
  
  
-### Claim record：
+### Claim record
   
  |     | Main   Function |          
  |:-----|:--------|
@@ -219,7 +236,7 @@ The asset includes native digit asset and Nep-5 smart constract digit asset.
  
  
 
- #### Auth manager contract
+ ### Auth manager contract
 
  |     | Main   Function |       
  |:-----|:--------|
@@ -230,7 +247,7 @@ The asset includes native digit asset and Nep-5 smart constract digit asset.
 |     5 | String withdraw(String initiatorOntid,String password,byte[] salt,String contractAddr,String delegate, String role,int key,Account payerAcct, long gaslimit,long gasprice)          |
 
 
- ### Make transaction：
+ ### Make transaction
 
  |     | Main   Function |      
  |:-----|:--------|
@@ -241,7 +258,7 @@ The asset includes native digit asset and Nep-5 smart constract digit asset.
 |     5 | Transaction makeWithDraw(String ontid,String contractAddr,String delegate, String role,int key,String payer,long gaslimit,long gasprice)                  |   
 
  
-  #### Governance contract
+  ### Governance contract
   
  |     | Main   Function |         
  |:-----|:--------|
