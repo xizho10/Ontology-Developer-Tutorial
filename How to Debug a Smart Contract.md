@@ -15,7 +15,7 @@
 
 #### Step1 - Create a python project
 
-Select the python language and blank template. Copy the code in [OEP4Sample.py]([https://github.com/tonyclarking/python-template/blob/master/OEP4Sample/OEP4Sample.py](https://github.com/tonyclarking/python-template/blob/master/OEP4Sample/OEP4Sample.py)
+Select the python language and blank template. Copy the code in [OEP4Sample.py](https://github.com/tonyclarking/python-template/blob/master/OEP4Sample/OEP4Sample.py](https://github.com/tonyclarking/python-template/blob/master/OEP4Sample/OEP4Sample.py)
 ) to editor.
 
 ![step 1.png](https://upload-images.jianshu.io/upload_images/150344-cc24c675bc9a3267.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
