@@ -1,9 +1,9 @@
 <h1 align="center">Learning SmartX: How to Test a Smart Contract</h1>
 <p align="center" class="version">Version 0.1</p>
 
-#### 1. Create a python project
+### 1. Create a python project
 
-Select the python language and blank template. Copy the code in [OEP4Sample.py]([https://github.com/tonyclarking/python-template/blob/master/OEP4Sample/OEP4Sample.py](https://github.com/tonyclarking/python-template/blob/master/OEP4Sample/OEP4Sample.py)
+Select the python language and blank template. Copy the code in [OEP4Sample.py](https://github.com/tonyclarking/python-template/blob/master/OEP4Sample/OEP4Sample.py](https://github.com/tonyclarking/python-template/blob/master/OEP4Sample/OEP4Sample.py)
 ) to editor.
 
 ![step 1.png](https://upload-images.jianshu.io/upload_images/150344-cc24c675bc9a3267.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
@@ -29,7 +29,7 @@ Note: You can click setting icon in the upper right corner to open setting and t
 ![wallet](https://upload-images.jianshu.io/upload_images/150344-da73fd59ddda019a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
-### 2. Add an account
+### 3. Add an account
 
 Input your account private key (hex string) and click the "OK" button.
 
@@ -46,11 +46,11 @@ Step2 - use Tool panel to decrypt private key
 ![decrypt private key](https://upload-images.jianshu.io/upload_images/150344-f2c8b07b1dfeffbd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
-### 3. Test function
+### 4. Test function
 
 Step1 - select network and contract hash
 
-You can also select "other" option and input an existing contract hash.
+Note: You can also select "other" option and input an existing contract hash.
 
 Step2- select functions, run type, and sign account
 
