@@ -76,7 +76,7 @@ punica unbox tutorialtoken
 
 Note: Before compilation, you can modify the code if you want to. The contract ope4_token.py locates under /tutorialtoken/contracts. 
 
-Step1 - Compile
+#### 2.1 Compile
 
 ```
 punica compile
@@ -90,7 +90,7 @@ Compile oep4_token.py
 compiled, Thank you
 ```
 
-Step2 - Deploy
+#### 2.2 Deploy
 
 ```
 punica deploy
@@ -108,7 +108,7 @@ Contract address is 0xd7b6a47966770c1545bf74c16426b26c0a238b16...
 
 Note: The reason why the result occurs "Deploy failed..." is that the contract has already been deployed.
 
-Step3 - Invoke
+#### 2.3 Invoke
 
 ```
 punica invoke
