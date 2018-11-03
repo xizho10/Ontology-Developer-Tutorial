@@ -5,13 +5,13 @@
 - [Ontology documentation](https://ontio.github.io/documentation/)
 
 ### 2. How to install Ontology? 
-1. release
-- [download from release](https://github.com/ontio/ontology/releases) 
+1. Release
+- [Download from release](https://github.com/ontio/ontology/releases) 
 - ```curl https://dev.ont.io/ontology_install | sh```
-2. source code
+2. Source code
 - ```git clone https://github.com/ontio/ontology.git```
-3. solo chain
-- [download from release](https://github.com/ontio/ontology/releases)
+3. Solo chain
+- [Download from release](https://github.com/ontio/ontology/releases)
 
 ### 3. Ontology Smart Contract
 - [Overview](https://ontio.github.io/documentation/)
