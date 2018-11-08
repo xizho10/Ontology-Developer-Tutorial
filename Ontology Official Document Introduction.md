@@ -33,3 +33,12 @@ Notes: We support Python and C# language currently and will support Go and Javas
 
 ### 8. How to use dapi 
 - [dapi tutorial](https://ontio.github.io/documentation/ontology_dapp_dev_tutorial_en.html)
+
+
+[Click here to view vedio](https://v.qq.com/txp/iframe/player.html?vid=u0784b610k9)
+
+```
+Contact: Yue Zhao 
+Wechat: 16621171248
+Email: messixaviinsta0303@163.com
+```
