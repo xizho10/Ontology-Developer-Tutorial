@@ -39,12 +39,12 @@ At initialization, the blockchain will deploy several native contract by default
 
 ### 3. Solo-chain demo
 
-Step1 - Start solo-chain 
+**Step1** - Start solo-chain 
 
 ![step 1](https://upload-images.jianshu.io/upload_images/150344-dcb35a41dce1ffa2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
-Step2 - Transfer and redeem ONG 
+**Step2** - Transfer and redeem ONG 
 
 2.1 Transfer ONT to another account
 
@@ -54,11 +54,11 @@ Step2 - Transfer and redeem ONG
 
 ![redeem](https://upload-images.jianshu.io/upload_images/150344-4b3359f29ee2e407.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-Step 3 - Write a smart contract with SmartX
+**Step3** - Write a smart contract with SmartX
 
 You can refer to [this document](http://punica.ont.io/tutorials/Learning-SmartX-How-to-Develop-a-dApp-with-Python-SDK/) for how to write a smart contract with SmartX.
 
-Step 4 - Transfer 1000 ONG to Cyano wallet for deploying smart contracts.
+**Step4** - Transfer 1000 ONG to Cyano wallet for deploying smart contracts.
 
 4.1 Install Cyano wallet in Chrome, open it and create a new account.
 
