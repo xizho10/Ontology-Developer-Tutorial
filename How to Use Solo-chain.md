@@ -62,11 +62,13 @@ Step 4 - Transfer 1000 ONG to Cyano wallet for deploying smart contracts.
 
 4.1 Install Cyano wallet in Chrome, open it and create a new account.
 
-![cyano wallet](https://upload-images.jianshu.io/upload_images/150344-d0401a73e787ff0d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![cyano wallet](https://upload-images.jianshu.io/upload_images/150344-585b8e0c7687b752.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 
 4.2 Create a new account and get public address
 
-![new account](https://upload-images.jianshu.io/upload_images/150344-02d516517072ac82.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![new account](https://upload-images.jianshu.io/upload_images/150344-2dc15c881913de5d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 
 ![public address](https://upload-images.jianshu.io/upload_images/150344-f46765ac09c6ef8f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
