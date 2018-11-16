@@ -3,6 +3,7 @@
 
 ### 1. What is Ontology? 
 - [Ontology documentation](https://ontio.github.io/documentation/)
+- [New Ontology documentation](https://dev-docs.ont.io/)
 
 ### 2. How to install Ontology? 
 1. Release
